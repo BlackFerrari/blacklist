@@ -11,8 +11,8 @@
 <div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
 <script>
 // Replace these placeholders after deploying the Cloudflare Worker. Never put secrets here.
-const API_BASE = "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev";
-const RAW_URL = "https://raw.githubusercontent.com/YOUR-GITHUB-USERNAME/YOUR-PUBLIC-REPO/main/blacklist.txt";
+const API_BASE = "https://blacklist-manager-api.ranjanakasun.workers.dev";
+const RAW_URL = "https://raw.githubusercontent.com/Uptime97/blacklist/main/blacklist.txt";
 const PAGE_SIZE=12;let sessionToken="",allIps=[],page=1,editOriginal="";const $=id=>document.getElementById(id);
 const notice=(el,msg,kind="error")=>{el.textContent=msg;el.className="notice "+kind},hideNotice=el=>{el.textContent="";el.className="notice hidden"};
 function apiUrl(path){if(API_BASE.includes("YOUR-WORKER"))throw Error("Configure API_BASE in index.html with your deployed Worker URL.");return API_BASE.replace(/\/$/,"")+path}
