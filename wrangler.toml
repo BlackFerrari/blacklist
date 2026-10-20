@@ -1,0 +1,6 @@
+name = "blacklist-manager-api"
+main = "worker.js"
+compatibility_date = "2026-10-20"
+# Configure GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH, FILE_PATH and ALLOWED_ORIGIN
+# as Worker variables. Configure GITHUB_TOKEN, PORTAL_PASSWORD and SESSION_SECRET
+# as encrypted Worker secrets. See README.md.
