@@ -1,0 +1,30 @@
+name: Validate blacklist
+on:
+  push:
+    paths: ["blacklist.txt"]
+  pull_request:
+    paths: ["blacklist.txt"]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate IP addresses and duplicates
+        run: |
+          python - <<'PY'
+          import ipaddress
+          from pathlib import Path
+          entries=[]
+          for n, raw in enumerate(Path("blacklist.txt").read_text().splitlines(), 1):
+              ip=raw.strip()
+              if not ip or ip.startswith("#"):
+                  continue
+              try:
+                  ipaddress.ip_address(ip)
+              except ValueError:
+                  raise SystemExit(f"Invalid IP on line {n}: {ip}")
+              entries.append(ip.lower())
+          if len(entries) != len(set(entries)):
+              raise SystemExit("Duplicate IP addresses found")
+          print(f"Validated {len(entries)} IP address(es)")
+          PY
