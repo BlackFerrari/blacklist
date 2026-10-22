@@ -44,6 +44,9 @@ class DevHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/feeds":
             self._handle_get_feeds()
             return
+        if self.path == "/api/list":
+            self._handle_get_list()
+            return
         if self.path.startswith("/api/") or self.path == "/health":
             self._proxy_request("GET")
             return
@@ -60,6 +63,22 @@ class DevHandler(SimpleHTTPRequestHandler):
             self._proxy_request("POST")
             return
         self.send_error(405, "Method Not Allowed")
+
+    def _handle_get_list(self):
+        blacklist_file = DIRECTORY / "blacklist.txt"
+        ips = []
+        if blacklist_file.exists():
+            for line in blacklist_file.read_text(encoding="utf-8").splitlines():
+                s = line.strip()
+                if s and not s.startswith("#"):
+                    ips.append(s)
+        resp = json.dumps({"ips": ips}).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(resp)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(resp)
 
     def _handle_get_feeds(self):
         feeds_file = DIRECTORY / "feeds.json"
@@ -179,6 +198,33 @@ class DevHandler(SimpleHTTPRequestHandler):
                     for item in (payload.get("ips") or []):
                         dates.pop(item, None)
                 dates_file.write_text(json.dumps(dates, indent=2), encoding="utf-8")
+
+                bl_file = DIRECTORY / "blacklist.txt"
+                if bl_file.exists():
+                    current_ips = [l.strip() for l in bl_file.read_text(encoding="utf-8").splitlines() if l.strip() and not l.strip().startswith("#")]
+                    if action == "add" and ip and ip not in current_ips:
+                        current_ips.append(ip)
+                    elif action == "delete" and ip and ip in current_ips:
+                        current_ips.remove(ip)
+                    elif action == "edit" and ip:
+                        old_ip = payload.get("oldIp")
+                        if old_ip and old_ip in current_ips:
+                            idx = current_ips.index(old_ip)
+                            current_ips[idx] = ip
+                    elif action == "bulk_add":
+                        for itm in (payload.get("ips") or []):
+                            if itm and itm not in current_ips:
+                                current_ips.append(itm)
+                    elif action == "bulk_delete":
+                        remove_set = set(payload.get("ips") or [])
+                        current_ips = [x for x in current_ips if x not in remove_set]
+                    bl_file.write_text("\n".join(current_ips) + "\n", encoding="utf-8")
+                    try:
+                        resp_dict = json.loads(response_body.decode("utf-8"))
+                        resp_dict["ips"] = current_ips
+                        response_body = json.dumps(resp_dict).encode("utf-8")
+                    except Exception:
+                        pass
             except Exception:
                 pass
 

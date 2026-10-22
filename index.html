@@ -91,11 +91,9 @@ async function initDates(){
     const r=await fetch("blacklist-dates.json",{cache:"no-store"});
     if(r.ok){
       const seeded=await r.json();
-      let changed=false;
       for(const [k,v] of Object.entries(seeded)){
-        if(!ipDates[k]){ipDates[k]=v;changed=true}
+        if(!ipDates[k]){ipDates[k]=v}
       }
-      if(changed)saveDates();
     }
   }catch{}
 }
@@ -106,13 +104,22 @@ function validIp(value){const s=value.trim();if(!s||s.length>45||/\s/.test(s))re
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function render(){
   const q=$("searchInput").value.trim().toLowerCase();
-  const filtered=allIps.filter(ip=>{const d=getInsertDate(ip);return ip.toLowerCase().includes(q)||d.toLowerCase().includes(q)});
+  let filtered;
+  if(!q){
+    filtered=allIps;
+  }else{
+    filtered=allIps.filter(ip=>{
+      if(ip.toLowerCase().includes(q))return true;
+      const d=ipDates[ip]||ipDates[ip.toLowerCase()];
+      return d&&d.includes(q);
+    });
+  }
   const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
   page=Math.min(page,pages);
   const rows=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
   $("totalCount").textContent=allIps.length.toLocaleString();
   $("shownCount").textContent=filtered.length.toLocaleString();
-  $("pageInfo").textContent=filtered.length?`Showing ${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,filtered.length)} of ${filtered.length}`:"0 entries";
+  $("pageInfo").textContent=filtered.length?`Showing ${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,filtered.length)} of ${filtered.length.toLocaleString()}`:"0 entries";
   $("prevBtn").disabled=page<=1;
   $("nextBtn").disabled=page>=pages;
   $("emptyState").classList.toggle("hidden",rows.length>0);
@@ -127,7 +134,7 @@ function showApp(){$("loginPanel").classList.add("hidden");$("appPanel").classLi
 async function loadList(){
   $("refreshBtn").disabled=true;
   try{
-    await initDates();
+    initDates();
     const d=await api("/api/list");
     allIps=d.ips;
     render();
