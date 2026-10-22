@@ -1,0 +1,10 @@
+# VS Code debug profiles
+.vscode/*-profile/
+.vscode/*-profile
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Local dev server logs
+*.log

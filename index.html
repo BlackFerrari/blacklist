@@ -1,32 +1,416 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>Blacklist IP Manager</title>
+<script src="xlsx.full.min.js"></script>
+<script>if(typeof XLSX==="undefined"){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>')}</script>
 <style>
-:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#dce8ff,transparent 32%),#f4f7fb;min-height:100vh}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650}button:disabled{opacity:.55;cursor:not-allowed}.primary{background:#315ee8;color:white}.secondary{background:#e9eef8;color:#25324b}.danger{background:#fff0f0;color:#b42318}.ghost{background:transparent;color:#53617a;border:1px solid #dbe2ee}.shell{max-width:1180px;margin:auto;padding:28px 20px 55px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:13px}.mark{width:47px;height:47px;border-radius:15px;background:#315ee8;color:white;display:grid;place-items:center;font-size:25px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#5270b9}.brand h1{font-size:24px;margin:3px 0 0;letter-spacing:-.04em}.top-actions{display:flex;gap:8px}.panel{background:white;border:1px solid #e1e7f0;border-radius:18px;box-shadow:0 12px 38px #253b6310}.login{max-width:430px;margin:65px auto;padding:27px}.login h2{margin:0 0 8px;font-size:23px}.muted{color:#69768d;line-height:1.55}.field{display:flex;flex-direction:column;gap:7px;margin:15px 0}.field label{font-size:13px;font-weight:700;color:#47536a}.field input{width:100%;border:1px solid #d7dfec;border-radius:10px;padding:12px;background:white;color:#172033;outline:none}.field input:focus,.search input:focus{border-color:#5579ed;box-shadow:0 0 0 3px #315ee81c}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.stat{padding:18px 20px}.stat-label{font-size:13px;color:#6b7890;font-weight:650}.stat-value{font-size:29px;font-weight:800;margin-top:8px}.stat-note{font-size:12px;color:#8490a5;margin-top:3px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}.list-panel{overflow:hidden}.list-head{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #edf0f6}.list-head h2,.side h2{margin:0;font-size:17px}.search{position:relative;max-width:330px;width:100%}.search input{width:100%;border:1px solid #dbe2ee;background:#f9fbfe;border-radius:10px;padding:11px 13px 11px 36px;outline:none}.search span{position:absolute;left:13px;top:9px;color:#7d8ba2}table{border-collapse:collapse;width:100%;min-width:550px}th{text-align:left;padding:12px 18px;background:#f9fbfe;color:#7a879d;font-size:11px;letter-spacing:.08em;text-transform:uppercase}td{padding:13px 18px;border-top:1px solid #eef1f6;font-size:14px}tbody tr:hover{background:#f8faff}.ip{font-family:ui-monospace,Consolas,monospace;font-weight:700}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;background:#eaf8ef;color:#187443;padding:5px 9px;font-size:11px;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#22a05a;border-radius:50%}.row-actions{display:flex;gap:6px}.small{padding:7px 10px;font-size:12px}.empty{padding:42px 20px;text-align:center;color:#7b879a}.pagination{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-top:1px solid #edf0f6;color:#738098;font-size:12px}.side{padding:20px}.side .muted{font-size:13px}.full{width:100%;margin-top:5px}.urlbox{margin-top:18px;padding:13px;background:#f7f9fd;border:1px solid #e5eaf3;border-radius:12px}.urlbox label{display:block;font-size:11px;color:#7a879d;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}.url{font-size:11px;line-height:1.5;overflow-wrap:anywhere;color:#3153b9;font-family:ui-monospace,monospace}.urlbox button{margin-top:10px;width:100%}.notice{border-radius:11px;padding:11px 13px;font-size:13px;margin:14px 0;line-height:1.45}.error{background:#fff0f0;color:#a12622}.success{background:#eaf8ef;color:#176b3d}.hidden{display:none!important}.footer{display:flex;justify-content:space-between;gap:15px;margin-top:20px;color:#8792a5;font-size:12px}.modal-backdrop{position:fixed;inset:0;background:#11182780;display:grid;place-items:center;padding:20px;z-index:5}.modal{width:min(440px,100%);padding:24px}.modal h2{margin:0 0 6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}@media(max-width:850px){.layout{grid-template-columns:1fr}.list-head{align-items:flex-start;flex-direction:column}.search{max-width:none}}@media(max-width:560px){.shell{padding:16px 11px 30px}.top{align-items:flex-start;flex-direction:column}.brand h1{font-size:20px}.top-actions{width:100%}.top-actions button{flex:1}.stats{gap:7px}.stat{padding:12px 9px}.stat-value{font-size:22px}.stat-label{font-size:11px}.footer{flex-direction:column}}
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#dce8ff,transparent 32%),#f4f7fb;min-height:100vh}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650}button:disabled{opacity:.55;cursor:not-allowed}.primary{background:#315ee8;color:white}.secondary{background:#e9eef8;color:#25324b}.danger{background:#fff0f0;color:#b42318}.ghost{background:transparent;color:#53617a;border:1px solid #dbe2ee}.shell{max-width:1180px;margin:auto;padding:28px 20px 55px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:13px}.mark{width:47px;height:47px;border-radius:15px;background:#315ee8;color:white;display:grid;place-items:center;font-size:25px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#5270b9}.brand h1{font-size:24px;margin:3px 0 0;letter-spacing:-.04em}.top-actions{display:flex;gap:8px}.panel{background:white;border:1px solid #e1e7f0;border-radius:18px;box-shadow:0 12px 38px #253b6310}.login{max-width:430px;margin:65px auto;padding:27px}.login h2{margin:0 0 8px;font-size:23px}.muted{color:#69768d;line-height:1.55}.field{display:flex;flex-direction:column;gap:7px;margin:15px 0}.field label{font-size:13px;font-weight:700;color:#47536a}.field input{width:100%;border:1px solid #d7dfec;border-radius:10px;padding:12px;background:white;color:#172033;outline:none}.field input:focus,.search input:focus{border-color:#5579ed;box-shadow:0 0 0 3px #315ee81c}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.stat{padding:18px 20px}.stat-label{font-size:13px;color:#6b7890;font-weight:650}.stat-value{font-size:29px;font-weight:800;margin-top:8px}.stat-note{font-size:12px;color:#8490a5;margin-top:3px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}.list-panel{overflow:hidden}.list-head{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #edf0f6}.list-head h2,.side h2{margin:0;font-size:17px}.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.search{position:relative;max-width:280px;width:100%}.search input{width:100%;border:1px solid #dbe2ee;background:#f9fbfe;border-radius:10px;padding:11px 13px 11px 36px;outline:none}.search span{position:absolute;left:13px;top:9px;color:#7d8ba2}table{border-collapse:collapse;width:100%;min-width:620px}th{text-align:left;padding:12px 18px;background:#f9fbfe;color:#7a879d;font-size:11px;letter-spacing:.08em;text-transform:uppercase}td{padding:13px 18px;border-top:1px solid #eef1f6;font-size:14px}tbody tr:hover{background:#f8faff}.ip{font-family:ui-monospace,Consolas,monospace;font-weight:700}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;background:#eaf8ef;color:#187443;padding:5px 9px;font-size:11px;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#22a05a;border-radius:50%}.row-actions{display:flex;gap:6px}.small{padding:7px 10px;font-size:12px}.date{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#54647e;white-space:nowrap}.empty{padding:42px 20px;text-align:center;color:#7b879a}.pagination{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-top:1px solid #edf0f6;color:#738098;font-size:12px}.side{padding:20px}.side .muted{font-size:13px}.full{width:100%;margin-top:5px}.urlbox{margin-top:18px;padding:13px;background:#f7f9fd;border:1px solid #e5eaf3;border-radius:12px}.urlbox label{display:block;font-size:11px;color:#7a879d;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}.url{font-size:11px;line-height:1.5;overflow-wrap:anywhere;color:#3153b9;font-family:ui-monospace,monospace}.urlbox button{margin-top:10px;width:100%}.excel-card{margin-top:16px;padding:14px;background:#f8fbfe;border:1px solid #dce6f5;border-radius:14px}.excel-card h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#2a3d66}.excel-card p{margin:0 0 10px;font-size:12px;color:#677b9d;line-height:1.45}.excel-card .btn-stack{display:flex;flex-direction:column;gap:8px}.whitelist-card{margin-top:16px;padding:14px;background:#fffaf8;border:1px solid #f9ded5;border-radius:14px}.whitelist-card h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#7c2d12}.whitelist-card p{margin:0 0 10px;font-size:12px;color:#9a5b49;line-height:1.45}.badge-chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:750;gap:4px}.badge-green{background:#eaf8ef;color:#187443}.badge-yellow{background:#fef9c3;color:#854d0e}.badge-gray{background:#f1f5f9;color:#475569}.badge-red{background:#fff0f0;color:#b42318}.preview-box{max-height:170px;overflow-y:auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-family:ui-monospace,monospace;font-size:12px;margin:12px 0;line-height:1.6}.preview-item{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f1f5f9}.preview-summary{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.progress-bar-bg{width:100%;height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:10px 0}.progress-bar-fill{height:100%;background:#315ee8;width:0%;transition:width .2s}.notice{border-radius:11px;padding:11px 13px;font-size:13px;margin:14px 0;line-height:1.45}.error{background:#fff0f0;color:#a12622}.success{background:#eaf8ef;color:#176b3d}.hidden{display:none!important}.footer{display:flex;justify-content:space-between;gap:15px;margin-top:20px;color:#8792a5;font-size:12px}.modal-backdrop{position:fixed;inset:0;background:#11182780;display:grid;place-items:center;padding:20px;z-index:5}.modal{width:min(440px,100%);padding:24px}.modal h2{margin:0 0 6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}@media(max-width:850px){.layout{grid-template-columns:1fr}.list-head{align-items:flex-start;flex-direction:column}.search{max-width:none}}@media(max-width:560px){.shell{padding:16px 11px 30px}.top{align-items:flex-start;flex-direction:column}.brand h1{font-size:20px}.top-actions{width:100%}.top-actions button{flex:1}.stats{gap:7px}.stat{padding:12px 9px}.stat-value{font-size:22px}.stat-label{font-size:11px}.footer{flex-direction:column}}
 </style></head><body><div class="shell">
 <header class="top"><div class="brand"><div class="mark">⊘</div><div><div class="eyebrow">Security operations</div><h1>Blacklist IP Manager</h1></div></div><div id="topActions" class="top-actions hidden"><button id="refreshBtn" class="secondary">↻ Refresh</button><button id="logoutBtn" class="ghost">Sign out</button></div></header>
 <section id="loginPanel" class="panel login"><h2>Sign in to manage the list</h2><p class="muted">Authorized contributors can manage the shared IP blacklist without GitHub accounts.</p><form id="loginForm"><div class="field"><label for="password">Portal password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Enter shared access password"></div><button id="loginBtn" class="primary" style="width:100%">Sign in securely</button></form><div id="loginNotice" class="notice hidden"></div><p class="muted" style="font-size:12px">The GitHub token is stored only in the backend, never in this page.</p></section>
 <main id="appPanel" class="hidden"><div class="stats"><div class="panel stat"><div class="stat-label">Total IP addresses</div><div class="stat-value" id="totalCount">—</div><div class="stat-note">Current repository list</div></div><div class="panel stat"><div class="stat-label">Matching results</div><div class="stat-value" id="shownCount">—</div><div class="stat-note">Search-filtered count</div></div><div class="panel stat"><div class="stat-label">List status</div><div class="stat-value" style="font-size:20px;margin-top:14px"><span class="pill">Connected</span></div><div class="stat-note" id="lastUpdated">Not refreshed yet</div></div></div>
-<div class="layout"><section class="panel list-panel"><div class="list-head"><div><h2>Blacklist entries</h2><div class="muted" style="font-size:12px;margin-top:4px">One IP address per line in blacklist.txt</div></div><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search IP addresses…" autocomplete="off"></div></div><div style="overflow:auto"><table><thead><tr><th>IP address</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ipRows"></tbody></table><div id="emptyState" class="empty hidden">No IP addresses match your search.</div></div><div class="pagination"><span id="pageInfo">0 entries</span><div style="display:flex;gap:7px"><button id="prevBtn" class="ghost small">Previous</button><button id="nextBtn" class="ghost small">Next</button></div></div></section>
-<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Duplicate entries are rejected.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div><div class="footer"><span>Blacklist IP Manager · Secure backend access</span><span>No GitHub token is stored in this page.</span></div></main></div>
-<div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
+<div class="layout"><section class="panel list-panel"><div class="list-head"><div><h2>Blacklist entries</h2><div class="muted" style="font-size:12px;margin-top:4px">One IP address per line in blacklist.txt</div></div><div class="header-actions"><button id="exportExcelBtn" class="secondary small" type="button" title="Download all blacklisted IPs as an Excel (.xlsx) file">📥 Download Excel</button><button id="importExcelBtn" class="primary small" type="button" title="Upload Excel to add new IPs (skips duplicates)">＋ Import Excel</button><button id="whitelistBtn" class="danger small" type="button" style="border:1px solid #fed7d7" title="Upload Whitelist Excel to remove IPs from blacklist">🛡️ Upload Whitelist</button><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search IP or date…" autocomplete="off"></div></div></div><div style="overflow:auto"><table><thead><tr><th>IP address</th><th>Insert date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ipRows"></tbody></table><div id="emptyState" class="empty hidden">No IP addresses match your search.</div></div><div class="pagination"><span id="pageInfo">0 entries</span><div style="display:flex;gap:7px"><button id="prevBtn" class="ghost small">Previous</button><button id="nextBtn" class="ghost small">Next</button></div></div></section>
+<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Duplicate entries are rejected.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><div class="field"><label for="newDate">Insert date</label><input id="newDate" type="date"></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="excel-card"><h3>Excel Management</h3><p>Export current blacklist or upload a spreadsheet to add new IPs.</p><div class="btn-stack"><button id="sideExportBtn" class="secondary full small" type="button">📥 Download Excel (.xlsx)</button><button id="sideImportBtn" class="primary full small" type="button">📤 Bulk Import Excel</button></div><p style="font-size:11px;color:#8595ae;margin-top:8px">Duplicate IPs in file are automatically ignored.</p></div><div class="whitelist-card"><h3>Whitelist Removal</h3><p>Upload an Excel file of allowed IPs to remove them from the block list.</p><button id="sideWhitelistBtn" class="danger full small" type="button" style="border:1px solid #fecaca">🛡️ Upload Whitelist Excel</button><p style="font-size:11px;color:#a87163;margin-top:8px">Only existing blocked IPs are removed.</p></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div><div class="footer"><span>Blacklist IP Manager · Secure backend access</span><span>No GitHub token is stored in this page.</span></div></main></div>
+<input type="file" id="importExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
+<input type="file" id="whitelistExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
+<div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="field"><label for="editDate">Insert date</label><input id="editDate" type="date"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
+<div id="bulkModalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" style="max-width:490px"><h2 id="bulkModalTitle">Confirm Action</h2><p id="bulkModalSubtitle" class="muted">Review the detected IP addresses before proceeding.</p><div id="bulkSummary" class="preview-summary"></div><div id="bulkPreview" class="preview-box"></div><div id="bulkProgressArea" class="hidden"><div id="bulkProgressText" class="muted" style="font-size:12px">Processing...</div><div class="progress-bar-bg"><div id="bulkProgressFill" class="progress-bar-fill"></div></div></div><div class="modal-actions"><button id="cancelBulkBtn" type="button" class="ghost">Cancel</button><button id="confirmBulkBtn" type="button" class="primary">Confirm & Proceed</button></div></div></div>
 <script>
-// Replace these placeholders after deploying the Cloudflare Worker. Never put secrets here.
-const API_BASE = "https://blacklist-manager-api.ranjanakasun.workers.dev";
+// When running locally, use the local proxy server; in production, use the deployed worker.
+const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? ""
+  : "https://blacklist-manager-api.ranjanakasun.workers.dev";
 const RAW_URL = "https://raw.githubusercontent.com/Uptime97/blacklist/main/blacklist.txt";
 const PAGE_SIZE=12;let sessionToken="",allIps=[],page=1,editOriginal="";const $=id=>document.getElementById(id);
+const DATES_STORAGE_KEY="blacklist_ip_dates";
+let ipDates={};
+try{ipDates=JSON.parse(localStorage.getItem(DATES_STORAGE_KEY)||"{}")}catch{ipDates={}}
+const todayDateStr=()=>new Date().toISOString().slice(0,10);
+const saveDates=()=>{try{localStorage.setItem(DATES_STORAGE_KEY,JSON.stringify(ipDates))}catch{}};
+const getInsertDate=ip=>ipDates[ip]||ipDates[ip.toLowerCase()]||"2026-10-22";
+const setInsertDate=(ip,d)=>{ipDates[ip]=d||todayDateStr();saveDates()};
+const removeInsertDate=ip=>{delete ipDates[ip];delete ipDates[ip.toLowerCase()];saveDates()};
+async function initDates(){
+  try{
+    const r=await fetch("blacklist-dates.json",{cache:"no-store"});
+    if(r.ok){
+      const seeded=await r.json();
+      let changed=false;
+      for(const [k,v] of Object.entries(seeded)){
+        if(!ipDates[k]){ipDates[k]=v;changed=true}
+      }
+      if(changed)saveDates();
+    }
+  }catch{}
+}
 const notice=(el,msg,kind="error")=>{el.textContent=msg;el.className="notice "+kind},hideNotice=el=>{el.textContent="";el.className="notice hidden"};
 function apiUrl(path){if(API_BASE.includes("YOUR-WORKER"))throw Error("Configure API_BASE in index.html with your deployed Worker URL.");return API_BASE.replace(/\/$/,"")+path}
 async function api(path,body,auth=true){const headers={"Content-Type":"application/json"};if(auth&&sessionToken)headers.Authorization="Bearer "+sessionToken;const r=await fetch(apiUrl(path),{method:body?"POST":"GET",headers,body:body?JSON.stringify(body):undefined,cache:"no-store"});const d=await r.json().catch(()=>({error:"Invalid server response."}));if(!r.ok)throw Error(d.error||`Request failed (${r.status}).`);return d}
 function validIp(value){const s=value.trim();if(!s||s.length>45||/\s/.test(s))return false;if(s.includes(".")){const p=s.split(".");return p.length===4&&p.every(x=>/^(0|[1-9]\d{0,2})$/.test(x)&&+x<=255)}if(!s.includes(":")||!/^[0-9a-fA-F:]+$/.test(s)||s.includes(":::"))return false;const h=s.split("::");if(h.length>2)return false;const l=h[0]?h[0].split(":"):[],r=h.length===2&&h[1]?h[1].split(":"):[];if([...l,...r].some(x=>!/^[0-9a-fA-F]{1,4}$/.test(x)))return false;return h.length===2?l.length+r.length<8:l.length===8}
-const esc=s=>s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function render(){const q=$("searchInput").value.trim().toLowerCase(),filtered=allIps.filter(ip=>ip.toLowerCase().includes(q)),pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));page=Math.min(page,pages);const rows=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);$("totalCount").textContent=allIps.length.toLocaleString();$("shownCount").textContent=filtered.length.toLocaleString();$("pageInfo").textContent=filtered.length?`Showing ${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,filtered.length)} of ${filtered.length}`:"0 entries";$("prevBtn").disabled=page<=1;$("nextBtn").disabled=page>=pages;$("emptyState").classList.toggle("hidden",rows.length>0);$("ipRows").innerHTML=rows.map(ip=>`<tr><td class="ip">${esc(ip)}</td><td><span class="pill">Blacklisted</span></td><td><div class="row-actions"><button class="secondary small" data-edit="${esc(ip)}">Edit</button><button class="danger small" data-delete="${esc(ip)}">Delete</button></div></td></tr>`).join("");$("lastUpdated").textContent="Refreshed "+new Date().toLocaleTimeString()}
-function showLogin(){$("loginPanel").classList.remove("hidden");$("appPanel").classList.add("hidden");$("topActions").classList.add("hidden")};function showApp(){ $("loginPanel").classList.add("hidden");$("appPanel").classList.remove("hidden");$("topActions").classList.remove("hidden");$("rawUrl").textContent=RAW_URL}
-async function loadList(){$("refreshBtn").disabled=true;try{const d=await api("/api/list");allIps=d.ips;render()}catch(e){if(/session|unauthorized|expired/i.test(e.message)){sessionToken="";showLogin();notice($("loginNotice"),"Session expired. Please sign in again.")}else notice($("actionNotice"),e.message)}finally{$("refreshBtn").disabled=false}}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){
+  const q=$("searchInput").value.trim().toLowerCase();
+  const filtered=allIps.filter(ip=>{const d=getInsertDate(ip);return ip.toLowerCase().includes(q)||d.toLowerCase().includes(q)});
+  const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
+  page=Math.min(page,pages);
+  const rows=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  $("totalCount").textContent=allIps.length.toLocaleString();
+  $("shownCount").textContent=filtered.length.toLocaleString();
+  $("pageInfo").textContent=filtered.length?`Showing ${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,filtered.length)} of ${filtered.length}`:"0 entries";
+  $("prevBtn").disabled=page<=1;
+  $("nextBtn").disabled=page>=pages;
+  $("emptyState").classList.toggle("hidden",rows.length>0);
+  $("ipRows").innerHTML=rows.map(ip=>{
+    const d=getInsertDate(ip);
+    return `<tr><td class="ip">${esc(ip)}</td><td class="date">${esc(d)}</td><td><span class="pill">Blacklisted</span></td><td><div class="row-actions"><button class="secondary small" data-edit="${esc(ip)}">Edit</button><button class="danger small" data-delete="${esc(ip)}">Delete</button></div></td></tr>`;
+  }).join("");
+  $("lastUpdated").textContent="Refreshed "+new Date().toLocaleTimeString();
+}
+function showLogin(){$("loginPanel").classList.remove("hidden");$("appPanel").classList.add("hidden");$("topActions").classList.add("hidden")};
+function showApp(){$("loginPanel").classList.add("hidden");$("appPanel").classList.remove("hidden");$("topActions").classList.remove("hidden");$("rawUrl").textContent=RAW_URL;if($("newDate"))$("newDate").value=todayDateStr();}
+async function loadList(){
+  $("refreshBtn").disabled=true;
+  try{
+    await initDates();
+    const d=await api("/api/list");
+    allIps=d.ips;
+    render();
+  }catch(e){
+    if(/session|unauthorized|expired/i.test(e.message)){
+      sessionToken="";
+      showLogin();
+      notice($("loginNotice"),"Session expired. Please sign in again.");
+    }else{
+      notice($("actionNotice"),e.message);
+    }
+  }finally{
+    $("refreshBtn").disabled=false;
+  }
+}
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();hideNotice($("loginNotice"));$("loginBtn").disabled=true;try{const d=await api("/api/login",{password:$("password").value},false);sessionToken=d.token;$("password").value="";showApp();await loadList()}catch(err){notice($("loginNotice"),err.message)}finally{$("loginBtn").disabled=false}});
 $("logoutBtn").onclick=()=>{sessionToken="";allIps=[];showLogin();hideNotice($("loginNotice"))};$("refreshBtn").onclick=loadList;$("searchInput").oninput=()=>{page=1;render()};$("prevBtn").onclick=()=>{page--;render()};$("nextBtn").onclick=()=>{page++;render()};
 $("copyUrlBtn").onclick=async()=>{try{await navigator.clipboard.writeText(RAW_URL);$("copyUrlBtn").textContent="Copied!";setTimeout(()=>$("copyUrlBtn").textContent="Copy raw URL",1400)}catch{notice($("actionNotice"),"Clipboard unavailable. Copy the URL manually.")}};
-$("addForm").onsubmit=async e=>{e.preventDefault();hideNotice($("actionNotice"));const ip=$("newIp").value.trim();if(!validIp(ip)){notice($("actionNotice"),"Enter a valid IPv4 or IPv6 address.");return}$("addBtn").disabled=true;try{const d=await api("/api/change",{action:"add",ip});allIps=d.ips;$("newIp").value="";page=1;render();notice($("actionNotice"),d.message,"success")}catch(err){notice($("actionNotice"),err.message)}finally{$("addBtn").disabled=false}};
-$("ipRows").onclick=e=>{const edit=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");if(edit){editOriginal=edit.dataset.edit;$("editIp").value=editOriginal;$("modalDescription").textContent="Replace "+editOriginal+" with a new address.";$("modalBackdrop").classList.remove("hidden");$("editIp").focus()}if(del){const ip=del.dataset.delete;if(confirm("Delete "+ip+" from the blacklist? This will be committed to GitHub."))change({action:"delete",ip})}};
-$("cancelEdit").onclick=()=>$("modalBackdrop").classList.add("hidden");$("modalBackdrop").onclick=e=>{if(e.target===$("modalBackdrop"))$("modalBackdrop").classList.add("hidden")};$("editForm").onsubmit=async e=>{e.preventDefault();const ip=$("editIp").value.trim();if(!validIp(ip)){alert("Enter a valid IPv4 or IPv6 address.");return}await change({action:"edit",oldIp:editOriginal,ip})};
-async function change(payload){hideNotice($("actionNotice"));try{const d=await api("/api/change",payload);allIps=d.ips;$("modalBackdrop").classList.add("hidden");render();notice($("actionNotice"),d.message,"success")}catch(e){notice($("actionNotice"),e.message)}}
+$("addForm").onsubmit=async e=>{
+  e.preventDefault();
+  hideNotice($("actionNotice"));
+  const ip=$("newIp").value.trim();
+  const dateVal=$("newDate").value||todayDateStr();
+  if(!validIp(ip)){notice($("actionNotice"),"Enter a valid IPv4 or IPv6 address.");return}
+  $("addBtn").disabled=true;
+  try{
+    const d=await api("/api/change",{action:"add",ip});
+    setInsertDate(ip,dateVal);
+    allIps=d.ips;
+    $("newIp").value="";
+    $("newDate").value=todayDateStr();
+    page=1;
+    render();
+    notice($("actionNotice"),d.message,"success");
+  }catch(err){
+    notice($("actionNotice"),err.message);
+  }finally{
+    $("addBtn").disabled=false;
+  }
+};
+$("ipRows").onclick=e=>{
+  const edit=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");
+  if(edit){
+    editOriginal=edit.dataset.edit;
+    $("editIp").value=editOriginal;
+    if($("editDate"))$("editDate").value=getInsertDate(editOriginal);
+    $("modalDescription").textContent="Replace "+editOriginal+" with a new address.";
+    $("modalBackdrop").classList.remove("hidden");
+    $("editIp").focus();
+  }
+  if(del){
+    const ip=del.dataset.delete;
+    if(confirm("Delete "+ip+" from the blacklist? This will be committed to GitHub.")){
+      change({action:"delete",ip}).then(()=>{
+        removeInsertDate(ip);
+        render();
+      });
+    }
+  }
+};
+$("cancelEdit").onclick=()=>$("modalBackdrop").classList.add("hidden");
+$("modalBackdrop").onclick=e=>{if(e.target===$("modalBackdrop"))$("modalBackdrop").classList.add("hidden")};
+$("editForm").onsubmit=async e=>{
+  e.preventDefault();
+  const ip=$("editIp").value.trim();
+  const dateVal=($("editDate")&&$("editDate").value)||todayDateStr();
+  if(!validIp(ip)){alert("Enter a valid IPv4 or IPv6 address.");return}
+  await change({action:"edit",oldIp:editOriginal,ip});
+  removeInsertDate(editOriginal);
+  setInsertDate(ip,dateVal);
+  render();
+};
+async function change(payload){
+  hideNotice($("actionNotice"));
+  try{
+    const d=await api("/api/change",payload);
+    allIps=d.ips;
+    $("modalBackdrop").classList.add("hidden");
+    render();
+    notice($("actionNotice"),d.message,"success");
+  }catch(e){
+    notice($("actionNotice"),e.message);
+  }
+}
+
+// --- Excel Export, Import & Whitelist Removal ---
+let bulkPendingAction = null;
+
+function downloadExcel(){
+  if(!allIps.length){
+    alert("The blacklist is currently empty.");
+    return;
+  }
+  const data = allIps.map(ip => ({
+    "IP Address": ip,
+    "Insert Date": getInsertDate(ip),
+    "Status": "Blacklisted"
+  }));
+  const ws = XLSX.utils.json_to_sheet(data);
+  ws["!cols"] = [{ wch: 22 }, { wch: 15 }, { wch: 15 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Blacklist");
+  XLSX.writeFile(wb, `blacklist-ips-${todayDateStr()}.xlsx`);
+}
+
+async function parseExcelFile(file){
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, { type: "array" });
+  const rawIps = [];
+  const dates = {};
+  wb.SheetNames.forEach(sheetName => {
+    const sheet = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+    if(!rows || !rows.length) return;
+    let ipCol = -1, dateCol = -1;
+    if(Array.isArray(rows[0])){
+      rows[0].forEach((cell, idx) => {
+        const str = String(cell).toLowerCase().trim();
+        if(["ip", "ip address", "ip_address", "ipaddress", "address"].includes(str)) ipCol = idx;
+        if(["insert date", "date", "insert_date", "added", "timestamp"].includes(str)) dateCol = idx;
+      });
+    }
+    const startRow = ipCol >= 0 ? 1 : 0;
+    for(let r = startRow; r < rows.length; r++){
+      const row = rows[r];
+      if(!Array.isArray(row)) continue;
+      if(ipCol >= 0 && row[ipCol] !== undefined){
+        const v = String(row[ipCol]).trim();
+        if(validIp(v)){
+          rawIps.push(v);
+          if(dateCol >= 0 && row[dateCol]) dates[v] = String(row[dateCol]).trim();
+        }
+      } else {
+        for(let c = 0; c < row.length; c++){
+          const v = String(row[c]).trim();
+          if(validIp(v)){
+            rawIps.push(v);
+            break;
+          }
+        }
+      }
+    }
+  });
+  const uniqueIps = [];
+  const seen = new Set();
+  for(const ip of rawIps){
+    const l = ip.toLowerCase();
+    if(!seen.has(l)){
+      seen.add(l);
+      uniqueIps.push(ip);
+    }
+  }
+  return { uniqueIps, dates };
+}
+
+async function handleImportFile(file){
+  try{
+    const { uniqueIps, dates } = await parseExcelFile(file);
+    if(!uniqueIps.length){
+      alert("No valid IPv4 or IPv6 addresses found in the uploaded file.");
+      return;
+    }
+    const existing = new Set(allIps.map(x => x.toLowerCase()));
+    const newIps = [];
+    const duplicates = [];
+    for(const ip of uniqueIps){
+      if(existing.has(ip.toLowerCase())) duplicates.push(ip);
+      else newIps.push(ip);
+    }
+    if(!newIps.length){
+      alert(`All ${uniqueIps.length} valid IP(s) in "${file.name}" are already in the blacklist. 0 new IPs added.`);
+      return;
+    }
+    bulkPendingAction = { type: "import", ips: newIps, dates };
+    $("bulkModalTitle").textContent = "Bulk Import IP Addresses";
+    $("bulkModalSubtitle").textContent = `File: ${file.name} — Review before adding to GitHub blacklist.`;
+    $("bulkSummary").innerHTML = `
+      <span class="badge-chip badge-green">✓ ${newIps.length} New IP(s) to add</span>
+      <span class="badge-chip badge-yellow">⚠ ${duplicates.length} Duplicate(s) ignored</span>
+    `;
+    $("bulkPreview").innerHTML = newIps.map(ip => `<div class="preview-item"><span>${esc(ip)}</span><span class="date">${esc(dates[ip] || todayDateStr())}</span></div>`).join("");
+    $("confirmBulkBtn").textContent = `Add ${newIps.length} New IP(s)`;
+    $("confirmBulkBtn").className = "primary";
+    $("confirmBulkBtn").disabled = false;
+    $("cancelBulkBtn").disabled = false;
+    $("bulkProgressArea").classList.add("hidden");
+    $("bulkModalBackdrop").classList.remove("hidden");
+  }catch(e){
+    alert("Error reading Excel file: " + e.message);
+  }
+}
+
+async function handleWhitelistFile(file){
+  try{
+    const { uniqueIps } = await parseExcelFile(file);
+    if(!uniqueIps.length){
+      alert("No valid IPv4 or IPv6 addresses found in the uploaded whitelist file.");
+      return;
+    }
+    const existingMap = new Map(allIps.map(x => [x.toLowerCase(), x]));
+    const toRemove = [];
+    let notInList = 0;
+    for(const ip of uniqueIps){
+      const match = existingMap.get(ip.toLowerCase());
+      if(match) toRemove.push(match);
+      else notInList++;
+    }
+    if(!toRemove.length){
+      alert(`None of the ${uniqueIps.length} IP(s) in "${file.name}" are currently in the blacklist. No action needed.`);
+      return;
+    }
+    bulkPendingAction = { type: "whitelist", ips: toRemove };
+    $("bulkModalTitle").textContent = "Whitelist Removal from Blocklist";
+    $("bulkModalSubtitle").textContent = `File: ${file.name} — The following IPs will be unblocked and removed from GitHub blacklist.`;
+    $("bulkSummary").innerHTML = `
+      <span class="badge-chip badge-red">🛡️ ${toRemove.length} Matching IP(s) to remove</span>
+      <span class="badge-chip badge-gray">${notInList} not in blocklist (ignored)</span>
+    `;
+    $("bulkPreview").innerHTML = toRemove.map(ip => `<div class="preview-item"><span class="ip">${esc(ip)}</span><span class="pill" style="background:#fee2e2;color:#b91c1c">Will Unblock</span></div>`).join("");
+    $("confirmBulkBtn").textContent = `Remove ${toRemove.length} IP(s) from Blacklist`;
+    $("confirmBulkBtn").className = "danger";
+    $("confirmBulkBtn").disabled = false;
+    $("cancelBulkBtn").disabled = false;
+    $("bulkProgressArea").classList.add("hidden");
+    $("bulkModalBackdrop").classList.remove("hidden");
+  }catch(e){
+    alert("Error reading Excel file: " + e.message);
+  }
+}
+
+async function executeBulkAction(){
+  if(!bulkPendingAction) return;
+  const { type, ips, dates } = bulkPendingAction;
+  $("confirmBulkBtn").disabled = true;
+  $("cancelBulkBtn").disabled = true;
+  $("bulkProgressArea").classList.remove("hidden");
+  const progressText = $("bulkProgressText");
+  const progressFill = $("bulkProgressFill");
+  progressFill.style.width = "20%";
+
+  try{
+    if(type === "import"){
+      if(ips.length === 1){
+        progressText.textContent = `Adding ${ips[0]}...`;
+        progressFill.style.width = "60%";
+        const res = await api("/api/change", { action: "add", ip: ips[0] });
+        allIps = res.ips;
+      } else {
+        progressText.textContent = `Adding ${ips.length} new IP(s)...`;
+        try{
+          const r = await api("/api/change", { action: "bulk_add", ips });
+          allIps = r.ips;
+        }catch(err){
+          if(/Invalid request|Method not allowed|400/i.test(err.message)){
+            for(let i=0; i<ips.length; i++){
+              progressText.textContent = `Adding IP ${i+1} of ${ips.length}: ${ips[i]}...`;
+              progressFill.style.width = `${Math.round(((i+1)/ips.length)*100)}%`;
+              const res = await api("/api/change", { action: "add", ip: ips[i] });
+              allIps = res.ips;
+            }
+          } else {
+            throw err;
+          }
+        }
+      }
+      for(const ip of ips){
+        setInsertDate(ip, (dates && dates[ip]) || todayDateStr());
+      }
+      notice($("actionNotice"), `Successfully added ${ips.length} new IP(s). Duplicates were ignored.`, "success");
+    } else if(type === "whitelist"){
+      if(ips.length === 1){
+        progressText.textContent = `Removing ${ips[0]} from blacklist...`;
+        progressFill.style.width = "60%";
+        const res = await api("/api/change", { action: "delete", ip: ips[0] });
+        allIps = res.ips;
+      } else {
+        progressText.textContent = `Removing ${ips.length} whitelisted IP(s)...`;
+        try{
+          const r = await api("/api/change", { action: "bulk_delete", ips });
+          allIps = r.ips;
+        }catch(err){
+          if(/Invalid request|Method not allowed|400/i.test(err.message)){
+            for(let i=0; i<ips.length; i++){
+              progressText.textContent = `Removing IP ${i+1} of ${ips.length}: ${ips[i]}...`;
+              progressFill.style.width = `${Math.round(((i+1)/ips.length)*100)}%`;
+              const res = await api("/api/change", { action: "delete", ip: ips[i] });
+              allIps = res.ips;
+            }
+          } else {
+            throw err;
+          }
+        }
+      }
+      for(const ip of ips){
+        removeInsertDate(ip);
+      }
+      notice($("actionNotice"), `Successfully removed ${ips.length} whitelisted IP(s) from the block list.`, "success");
+    }
+    progressFill.style.width = "100%";
+    $("bulkModalBackdrop").classList.add("hidden");
+    page = 1;
+    render();
+  }catch(err){
+    $("bulkModalBackdrop").classList.add("hidden");
+    alert("Bulk operation status: " + err.message + "\n\nRefreshing list from GitHub to check status...");
+    await loadList();
+  }finally{
+    $("confirmBulkBtn").disabled = false;
+    $("cancelBulkBtn").disabled = false;
+    bulkPendingAction = null;
+    $("importExcelInput").value = "";
+    $("whitelistExcelInput").value = "";
+  }
+}
+
+$("exportExcelBtn").onclick = downloadExcel;
+$("sideExportBtn").onclick = downloadExcel;
+
+$("importExcelBtn").onclick = () => $("importExcelInput").click();
+$("sideImportBtn").onclick = () => $("importExcelInput").click();
+$("importExcelInput").onchange = e => {
+  if(e.target.files && e.target.files[0]) handleImportFile(e.target.files[0]);
+};
+
+$("whitelistBtn").onclick = () => $("whitelistExcelInput").click();
+$("sideWhitelistBtn").onclick = () => $("whitelistExcelInput").click();
+$("whitelistExcelInput").onchange = e => {
+  if(e.target.files && e.target.files[0]) handleWhitelistFile(e.target.files[0]);
+};
+
+$("cancelBulkBtn").onclick = () => {
+  $("bulkModalBackdrop").classList.add("hidden");
+  bulkPendingAction = null;
+  $("importExcelInput").value = "";
+  $("whitelistExcelInput").value = "";
+};
+$("bulkModalBackdrop").onclick = e => {
+  if(e.target === $("bulkModalBackdrop")) $("cancelBulkBtn").click();
+};
+$("confirmBulkBtn").onclick = executeBulkAction;
+
+initDates();
 </script></body></html>

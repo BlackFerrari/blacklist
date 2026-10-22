@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Ensure Dev Server Running",
+            "type": "shell",
+            "command": "python dev_server.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "Open in Default Browser",
+            "type": "shell",
+            "command": "cmd /c start http://localhost:8080",
+            "problemMatcher": []
+        }
+    ]
+}
