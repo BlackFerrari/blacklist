@@ -243,19 +243,19 @@ def is_port_in_use(port: int) -> bool:
         return s.connect_ex(("127.0.0.1", port)) == 0
 
 
-def start_hourly_scheduler():
+def start_auto_scheduler(interval_seconds: int = 300):
     import threading, time
     from datetime import datetime
     def loop():
         while True:
-            time.sleep(3600)  # Check every 1 hour
+            time.sleep(interval_seconds)  # Check every 5 minutes (300 seconds)
             try:
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Starting automated threat intel sync...")
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Auto-Sync Scheduler] Starting 5-minute automated threat intel sync...")
                 from sync_threat_intel import sync_all_feeds
                 res = sync_all_feeds()
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Completed. Total IPs: {res.get('totalIps', 0)}.")
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Auto-Sync Scheduler] Completed. Total IPs in blacklist.txt: {res.get('totalIps', 0)}.")
             except Exception as err:
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Error: {err}")
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Auto-Sync Scheduler] Error: {err}")
     t = threading.Thread(target=loop, daemon=True)
     t.start()
 
@@ -273,7 +273,7 @@ def main():
         sys.stdout.flush()
         return
 
-    start_hourly_scheduler()
+    start_auto_scheduler(300)
     server = HTTPServer(("127.0.0.1", PORT), DevHandler)
     print(f"============================================================")
     print(f" Blacklist IP Manager - Local Dev Server")

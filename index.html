@@ -24,11 +24,11 @@
 <div class="stats">
   <div class="panel stat"><div class="stat-label">Active Feeds</div><div class="stat-value" id="intelActiveFeeds">1 / 1</div><div class="stat-note">Configured threat intel URLs</div></div>
   <div class="panel stat"><div class="stat-label">Total Intel IPs</div><div class="stat-value" id="intelTotalIps">—</div><div class="stat-note">Aggregated into blacklist.txt</div></div>
-  <div class="panel stat"><div class="stat-label">Hourly Automation</div><div class="stat-value" style="font-size:18px;margin-top:14px"><span class="intel-badge"><span class="pulse-dot"></span> Every 1 Hour</span></div><div class="stat-note" id="intelNextSync">Local scheduler & GitHub Actions</div></div>
+  <div class="panel stat"><div class="stat-label">Auto-Sync Automation</div><div class="stat-value" style="font-size:18px;margin-top:14px"><span class="intel-badge"><span class="pulse-dot"></span> Every 5 Minutes</span></div><div class="stat-note" id="intelNextSync">Local scheduler & GitHub Actions</div></div>
 </div>
 <div class="layout"><section class="panel list-panel">
   <div class="list-head">
-    <div><h2>Integrated Threat Intel Feeds</h2><div class="muted" style="font-size:12px;margin-top:4px">Checked every hour · blacklist.txt reflects active feeds · Stale IPs removed</div></div>
+    <div><h2>Integrated Threat Intel Feeds</h2><div class="muted" style="font-size:12px;margin-top:4px">Checked every 5 minutes · blacklist.txt reflects active feeds · Stale IPs removed</div></div>
     <div class="header-actions"><button id="syncNowBtn" class="primary small" type="button">⚡ Sync Feeds Now</button></div>
   </div>
   <div id="intelNotice" class="notice hidden" style="margin:14px 22px"></div>
@@ -57,8 +57,8 @@
     <button id="addFeedBtn" class="primary full">＋ Add Feed Integration</button>
   </form>
   <div class="excel-card" style="margin-top:18px">
-    <h3>Hourly Sync Automation</h3>
-    <p>Feeds run automatically <strong>every 1 hour</strong> in both the background dev server and GitHub Actions. All threat intel IPs are merged into <code>blacklist.txt</code>, and non-feed IPs are purged.</p>
+    <h3>5-Minute Auto-Sync Automation</h3>
+    <p>Feeds run automatically <strong>every 5 minutes</strong> in both the background dev server and GitHub Actions. All threat intel IPs are merged into <code>blacklist.txt</code>, and non-feed IPs are purged.</p>
     <button id="sideSyncNowBtn" class="secondary full small" type="button">⚡ Run Sync Now</button>
   </div>
 </aside>
@@ -547,7 +547,7 @@ function renderFeeds(){
           </a>
         </td>
         <td>
-          <label class="switch" title="${feed.enabled ? 'Enabled - Checked every hour' : 'Disabled - Ignored during sync'}">
+          <label class="switch" title="${feed.enabled ? 'Enabled - Checked every 5 minutes' : 'Disabled - Ignored during sync'}">
             <input type="checkbox" class="feed-toggle" data-id="${esc(feed.id)}" ${feed.enabled ? "checked" : ""}>
             <span class="slider"></span>
           </label>
