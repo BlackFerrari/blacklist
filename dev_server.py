@@ -41,16 +41,78 @@ class DevHandler(SimpleHTTPRequestHandler):
         super().do_OPTIONS()
 
     def do_GET(self):
+        if self.path == "/api/feeds":
+            self._handle_get_feeds()
+            return
         if self.path.startswith("/api/") or self.path == "/health":
             self._proxy_request("GET")
             return
         super().do_GET()
 
     def do_POST(self):
+        if self.path == "/api/feeds":
+            self._handle_save_feeds()
+            return
+        if self.path == "/api/feeds/sync":
+            self._handle_sync_feeds()
+            return
         if self.path.startswith("/api/") or self.path == "/health":
             self._proxy_request("POST")
             return
         self.send_error(405, "Method Not Allowed")
+
+    def _handle_get_feeds(self):
+        feeds_file = DIRECTORY / "feeds.json"
+        data = b"[]"
+        if feeds_file.exists():
+            data = feeds_file.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(data)
+
+    def _handle_save_feeds(self):
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length) if content_length > 0 else b"[]"
+        feeds_file = DIRECTORY / "feeds.json"
+        try:
+            parsed = json.loads(body.decode("utf-8"))
+            if isinstance(parsed, dict) and "feeds" in parsed:
+                feeds_list = parsed["feeds"]
+            elif isinstance(parsed, list):
+                feeds_list = parsed
+            else:
+                feeds_list = []
+            feeds_file.write_text(json.dumps(feeds_list, indent=2), encoding="utf-8")
+            resp = json.dumps({"success": True, "feeds": feeds_list}).encode("utf-8")
+            status = 200
+        except Exception as e:
+            resp = json.dumps({"error": str(e)}).encode("utf-8")
+            status = 400
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(resp)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(resp)
+
+    def _handle_sync_feeds(self):
+        from sync_threat_intel import sync_all_feeds
+        try:
+            result = sync_all_feeds()
+            status = 200 if result.get("success") else 500
+            resp = json.dumps(result).encode("utf-8")
+        except Exception as e:
+            status = 500
+            resp = json.dumps({"success": False, "error": str(e)}).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(resp)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(resp)
 
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -135,6 +197,23 @@ def is_port_in_use(port: int) -> bool:
         return s.connect_ex(("127.0.0.1", port)) == 0
 
 
+def start_hourly_scheduler():
+    import threading, time
+    from datetime import datetime
+    def loop():
+        while True:
+            time.sleep(3600)  # Check every 1 hour
+            try:
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Starting automated threat intel sync...")
+                from sync_threat_intel import sync_all_feeds
+                res = sync_all_feeds()
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Completed. Total IPs: {res.get('totalIps', 0)}.")
+            except Exception as err:
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] [Hourly Scheduler] Error: {err}")
+    t = threading.Thread(target=loop, daemon=True)
+    t.start()
+
+
 def main():
     os.chdir(DIRECTORY)
     url = f"http://localhost:{PORT}"
@@ -148,6 +227,7 @@ def main():
         sys.stdout.flush()
         return
 
+    start_hourly_scheduler()
     server = HTTPServer(("127.0.0.1", PORT), DevHandler)
     print(f"============================================================")
     print(f" Blacklist IP Manager - Local Dev Server")

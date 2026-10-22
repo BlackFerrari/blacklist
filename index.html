@@ -4,12 +4,69 @@
 <script>if(typeof XLSX==="undefined"){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>')}</script>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#dce8ff,transparent 32%),#f4f7fb;min-height:100vh}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:650}button:disabled{opacity:.55;cursor:not-allowed}.primary{background:#315ee8;color:white}.secondary{background:#e9eef8;color:#25324b}.danger{background:#fff0f0;color:#b42318}.ghost{background:transparent;color:#53617a;border:1px solid #dbe2ee}.shell{max-width:1180px;margin:auto;padding:28px 20px 55px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:13px}.mark{width:47px;height:47px;border-radius:15px;background:#315ee8;color:white;display:grid;place-items:center;font-size:25px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#5270b9}.brand h1{font-size:24px;margin:3px 0 0;letter-spacing:-.04em}.top-actions{display:flex;gap:8px}.panel{background:white;border:1px solid #e1e7f0;border-radius:18px;box-shadow:0 12px 38px #253b6310}.login{max-width:430px;margin:65px auto;padding:27px}.login h2{margin:0 0 8px;font-size:23px}.muted{color:#69768d;line-height:1.55}.field{display:flex;flex-direction:column;gap:7px;margin:15px 0}.field label{font-size:13px;font-weight:700;color:#47536a}.field input{width:100%;border:1px solid #d7dfec;border-radius:10px;padding:12px;background:white;color:#172033;outline:none}.field input:focus,.search input:focus{border-color:#5579ed;box-shadow:0 0 0 3px #315ee81c}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.stat{padding:18px 20px}.stat-label{font-size:13px;color:#6b7890;font-weight:650}.stat-value{font-size:29px;font-weight:800;margin-top:8px}.stat-note{font-size:12px;color:#8490a5;margin-top:3px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}.list-panel{overflow:hidden}.list-head{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #edf0f6}.list-head h2,.side h2{margin:0;font-size:17px}.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.search{position:relative;max-width:280px;width:100%}.search input{width:100%;border:1px solid #dbe2ee;background:#f9fbfe;border-radius:10px;padding:11px 13px 11px 36px;outline:none}.search span{position:absolute;left:13px;top:9px;color:#7d8ba2}table{border-collapse:collapse;width:100%;min-width:620px}th{text-align:left;padding:12px 18px;background:#f9fbfe;color:#7a879d;font-size:11px;letter-spacing:.08em;text-transform:uppercase}td{padding:13px 18px;border-top:1px solid #eef1f6;font-size:14px}tbody tr:hover{background:#f8faff}.ip{font-family:ui-monospace,Consolas,monospace;font-weight:700}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;background:#eaf8ef;color:#187443;padding:5px 9px;font-size:11px;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#22a05a;border-radius:50%}.row-actions{display:flex;gap:6px}.small{padding:7px 10px;font-size:12px}.date{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#54647e;white-space:nowrap}.empty{padding:42px 20px;text-align:center;color:#7b879a}.pagination{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-top:1px solid #edf0f6;color:#738098;font-size:12px}.side{padding:20px}.side .muted{font-size:13px}.full{width:100%;margin-top:5px}.urlbox{margin-top:18px;padding:13px;background:#f7f9fd;border:1px solid #e5eaf3;border-radius:12px}.urlbox label{display:block;font-size:11px;color:#7a879d;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}.url{font-size:11px;line-height:1.5;overflow-wrap:anywhere;color:#3153b9;font-family:ui-monospace,monospace}.urlbox button{margin-top:10px;width:100%}.excel-card{margin-top:16px;padding:14px;background:#f8fbfe;border:1px solid #dce6f5;border-radius:14px}.excel-card h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#2a3d66}.excel-card p{margin:0 0 10px;font-size:12px;color:#677b9d;line-height:1.45}.excel-card .btn-stack{display:flex;flex-direction:column;gap:8px}.whitelist-card{margin-top:16px;padding:14px;background:#fffaf8;border:1px solid #f9ded5;border-radius:14px}.whitelist-card h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#7c2d12}.whitelist-card p{margin:0 0 10px;font-size:12px;color:#9a5b49;line-height:1.45}.badge-chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:750;gap:4px}.badge-green{background:#eaf8ef;color:#187443}.badge-yellow{background:#fef9c3;color:#854d0e}.badge-gray{background:#f1f5f9;color:#475569}.badge-red{background:#fff0f0;color:#b42318}.preview-box{max-height:170px;overflow-y:auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-family:ui-monospace,monospace;font-size:12px;margin:12px 0;line-height:1.6}.preview-item{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f1f5f9}.preview-summary{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.progress-bar-bg{width:100%;height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:10px 0}.progress-bar-fill{height:100%;background:#315ee8;width:0%;transition:width .2s}.notice{border-radius:11px;padding:11px 13px;font-size:13px;margin:14px 0;line-height:1.45}.error{background:#fff0f0;color:#a12622}.success{background:#eaf8ef;color:#176b3d}.hidden{display:none!important}.footer{display:flex;justify-content:space-between;gap:15px;margin-top:20px;color:#8792a5;font-size:12px}.modal-backdrop{position:fixed;inset:0;background:#11182780;display:grid;place-items:center;padding:20px;z-index:5}.modal{width:min(440px,100%);padding:24px}.modal h2{margin:0 0 6px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}@media(max-width:850px){.layout{grid-template-columns:1fr}.list-head{align-items:flex-start;flex-direction:column}.search{max-width:none}}@media(max-width:560px){.shell{padding:16px 11px 30px}.top{align-items:flex-start;flex-direction:column}.brand h1{font-size:20px}.top-actions{width:100%}.top-actions button{flex:1}.stats{gap:7px}.stat{padding:12px 9px}.stat-value{font-size:22px}.stat-label{font-size:11px}.footer{flex-direction:column}}
+.nav-tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #e2e8f0;padding-bottom:12px}.nav-tab{background:transparent;color:#54647e;border:1px solid transparent;border-radius:10px;padding:9px 18px;font-size:14px;font-weight:750;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .15s}.nav-tab:hover{background:#edf2f9;color:#1e293b}.nav-tab.active{background:#315ee8;color:white;box-shadow:0 4px 14px #315ee830}.feed-chip{background:#edf2f9;color:#315ee8;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:800}.nav-tab.active .feed-chip{background:#ffffff33;color:white}.switch{position:relative;display:inline-block;width:38px;height:22px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;inset:0;background-color:#cbd5e1;transition:.2s;border-radius:99px}.slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;transition:.2s;border-radius:50%}input:checked + .slider{background-color:#16a34a}input:checked + .slider:before{transform:translateX(16px)}.url-cell{font-family:ui-monospace,monospace;font-size:12px;color:#2563eb;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-decoration:none}.url-cell:hover{text-decoration:underline}.pulse-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;box-shadow:0 0 0 0 rgba(34,197,94,.7);animation:pulse 2s infinite}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.7)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}.intel-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#166534;background:#dcfce7;padding:4px 10px;border-radius:99px}.sync-spin{display:inline-block;animation:spin 1s linear infinite}@keyframes spin{100%{transform:rotate(360deg)}}
 </style></head><body><div class="shell">
 <header class="top"><div class="brand"><div class="mark">⊘</div><div><div class="eyebrow">Security operations</div><h1>Blacklist IP Manager</h1></div></div><div id="topActions" class="top-actions hidden"><button id="refreshBtn" class="secondary">↻ Refresh</button><button id="logoutBtn" class="ghost">Sign out</button></div></header>
 <section id="loginPanel" class="panel login"><h2>Sign in to manage the list</h2><p class="muted">Authorized contributors can manage the shared IP blacklist without GitHub accounts.</p><form id="loginForm"><div class="field"><label for="password">Portal password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Enter shared access password"></div><button id="loginBtn" class="primary" style="width:100%">Sign in securely</button></form><div id="loginNotice" class="notice hidden"></div><p class="muted" style="font-size:12px">The GitHub token is stored only in the backend, never in this page.</p></section>
-<main id="appPanel" class="hidden"><div class="stats"><div class="panel stat"><div class="stat-label">Total IP addresses</div><div class="stat-value" id="totalCount">—</div><div class="stat-note">Current repository list</div></div><div class="panel stat"><div class="stat-label">Matching results</div><div class="stat-value" id="shownCount">—</div><div class="stat-note">Search-filtered count</div></div><div class="panel stat"><div class="stat-label">List status</div><div class="stat-value" style="font-size:20px;margin-top:14px"><span class="pill">Connected</span></div><div class="stat-note" id="lastUpdated">Not refreshed yet</div></div></div>
+<main id="appPanel" class="hidden">
+<nav class="nav-tabs">
+  <button id="tabBlacklist" class="nav-tab active" type="button">🛡️ Blacklist Manager</button>
+  <button id="tabThreatIntel" class="nav-tab" type="button">🌐 Threat Intel Feeds <span id="feedCountBadge" class="feed-chip">1</span></button>
+</nav>
+
+<div id="viewBlacklist">
+<div class="stats"><div class="panel stat"><div class="stat-label">Total IP addresses</div><div class="stat-value" id="totalCount">—</div><div class="stat-note">Current repository list</div></div><div class="panel stat"><div class="stat-label">Matching results</div><div class="stat-value" id="shownCount">—</div><div class="stat-note">Search-filtered count</div></div><div class="panel stat"><div class="stat-label">List status</div><div class="stat-value" style="font-size:20px;margin-top:14px"><span class="pill">Connected</span></div><div class="stat-note" id="lastUpdated">Not refreshed yet</div></div></div>
 <div class="layout"><section class="panel list-panel"><div class="list-head"><div><h2>Blacklist entries</h2><div class="muted" style="font-size:12px;margin-top:4px">One IP address per line in blacklist.txt</div></div><div class="header-actions"><button id="exportExcelBtn" class="secondary small" type="button" title="Download all blacklisted IPs as an Excel (.xlsx) file">📥 Download Excel</button><button id="importExcelBtn" class="primary small" type="button" title="Upload Excel to add new IPs (skips duplicates)">＋ Import Excel</button><button id="whitelistBtn" class="danger small" type="button" style="border:1px solid #fed7d7" title="Upload Whitelist Excel to remove IPs from blacklist">🛡️ Upload Whitelist</button><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search IP or date…" autocomplete="off"></div></div></div><div style="overflow:auto"><table><thead><tr><th>IP address</th><th>Insert date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ipRows"></tbody></table><div id="emptyState" class="empty hidden">No IP addresses match your search.</div></div><div class="pagination"><span id="pageInfo">0 entries</span><div style="display:flex;gap:7px"><button id="prevBtn" class="ghost small">Previous</button><button id="nextBtn" class="ghost small">Next</button></div></div></section>
-<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Duplicate entries are rejected.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><div class="field"><label for="newDate">Insert date</label><input id="newDate" type="date"></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="excel-card"><h3>Excel Management</h3><p>Export current blacklist or upload a spreadsheet to add new IPs.</p><div class="btn-stack"><button id="sideExportBtn" class="secondary full small" type="button">📥 Download Excel (.xlsx)</button><button id="sideImportBtn" class="primary full small" type="button">📤 Bulk Import Excel</button></div><p style="font-size:11px;color:#8595ae;margin-top:8px">Duplicate IPs in file are automatically ignored.</p></div><div class="whitelist-card"><h3>Whitelist Removal</h3><p>Upload an Excel file of allowed IPs to remove them from the block list.</p><button id="sideWhitelistBtn" class="danger full small" type="button" style="border:1px solid #fecaca">🛡️ Upload Whitelist Excel</button><p style="font-size:11px;color:#a87163;margin-top:8px">Only existing blocked IPs are removed.</p></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div><div class="footer"><span>Blacklist IP Manager · Secure backend access</span><span>No GitHub token is stored in this page.</span></div></main></div>
+<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Duplicate entries are rejected.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><div class="field"><label for="newDate">Insert date</label><input id="newDate" type="date"></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="excel-card"><h3>Excel Management</h3><p>Export current blacklist or upload a spreadsheet to add new IPs.</p><div class="btn-stack"><button id="sideExportBtn" class="secondary full small" type="button">📥 Download Excel (.xlsx)</button><button id="sideImportBtn" class="primary full small" type="button">📤 Bulk Import Excel</button></div><p style="font-size:11px;color:#8595ae;margin-top:8px">Duplicate IPs in file are automatically ignored.</p></div><div class="whitelist-card"><h3>Whitelist Removal</h3><p>Upload an Excel file of allowed IPs to remove them from the block list.</p><button id="sideWhitelistBtn" class="danger full small" type="button" style="border:1px solid #fecaca">🛡️ Upload Whitelist Excel</button><p style="font-size:11px;color:#a87163;margin-top:8px">Only existing blocked IPs are removed.</p></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div>
+</div>
+
+<div id="viewThreatIntel" class="hidden">
+<div class="stats">
+  <div class="panel stat"><div class="stat-label">Active Feeds</div><div class="stat-value" id="intelActiveFeeds">1 / 1</div><div class="stat-note">Configured threat intel URLs</div></div>
+  <div class="panel stat"><div class="stat-label">Total Intel IPs</div><div class="stat-value" id="intelTotalIps">—</div><div class="stat-note">Aggregated into blacklist.txt</div></div>
+  <div class="panel stat"><div class="stat-label">Hourly Automation</div><div class="stat-value" style="font-size:18px;margin-top:14px"><span class="intel-badge"><span class="pulse-dot"></span> Every 1 Hour</span></div><div class="stat-note" id="intelNextSync">Local scheduler & GitHub Actions</div></div>
+</div>
+<div class="layout"><section class="panel list-panel">
+  <div class="list-head">
+    <div><h2>Integrated Threat Intel Feeds</h2><div class="muted" style="font-size:12px;margin-top:4px">Checked every hour · blacklist.txt reflects active feeds · Stale IPs removed</div></div>
+    <div class="header-actions"><button id="syncNowBtn" class="primary small" type="button">⚡ Sync Feeds Now</button></div>
+  </div>
+  <div id="intelNotice" class="notice hidden" style="margin:14px 22px"></div>
+  <div style="overflow:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Feed Name</th>
+          <th>Feed URL</th>
+          <th>Active</th>
+          <th>Last Synced</th>
+          <th>IP Count</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="feedsRows"></tbody>
+    </table>
+  </div>
+</section>
+<aside class="panel side">
+  <h2>Add Threat Intel Feed</h2>
+  <p class="muted">Integrate another threat intelligence feed URL. Accepts plain text or CSV format (comments starting with '#' are skipped).</p>
+  <form id="addFeedForm">
+    <div class="field"><label for="feedName">Feed name</label><input id="feedName" placeholder="e.g. Custom Threat Feed" required autocomplete="off"></div>
+    <div class="field"><label for="feedUrl">Feed URL</label><input id="feedUrl" placeholder="https://raw.githubusercontent.com/.../feed.txt" required autocomplete="off"></div>
+    <button id="addFeedBtn" class="primary full">＋ Add Feed Integration</button>
+  </form>
+  <div class="excel-card" style="margin-top:18px">
+    <h3>Hourly Sync Automation</h3>
+    <p>Feeds run automatically <strong>every 1 hour</strong> in both the background dev server and GitHub Actions. All threat intel IPs are merged into <code>blacklist.txt</code>, and non-feed IPs are purged.</p>
+    <button id="sideSyncNowBtn" class="secondary full small" type="button">⚡ Run Sync Now</button>
+  </div>
+</aside>
+</div>
+</div>
+
+<div class="footer"><span>Blacklist IP Manager · Secure backend access</span><span>No GitHub token is stored in this page.</span></div>
+</main></div>
 <input type="file" id="importExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
 <input type="file" id="whitelistExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
 <div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="field"><label for="editDate">Insert date</label><input id="editDate" type="date"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
@@ -66,7 +123,7 @@ function render(){
   $("lastUpdated").textContent="Refreshed "+new Date().toLocaleTimeString();
 }
 function showLogin(){$("loginPanel").classList.remove("hidden");$("appPanel").classList.add("hidden");$("topActions").classList.add("hidden")};
-function showApp(){$("loginPanel").classList.add("hidden");$("appPanel").classList.remove("hidden");$("topActions").classList.remove("hidden");$("rawUrl").textContent=RAW_URL;if($("newDate"))$("newDate").value=todayDateStr();}
+function showApp(){$("loginPanel").classList.add("hidden");$("appPanel").classList.remove("hidden");$("topActions").classList.remove("hidden");$("rawUrl").textContent=RAW_URL;if($("newDate"))$("newDate").value=todayDateStr();loadFeeds();}
 async function loadList(){
   $("refreshBtn").disabled=true;
   try{
@@ -411,6 +468,232 @@ $("bulkModalBackdrop").onclick = e => {
   if(e.target === $("bulkModalBackdrop")) $("cancelBulkBtn").click();
 };
 $("confirmBulkBtn").onclick = executeBulkAction;
+
+// --- Navigation Tab Switching ---
+function switchTab(targetTab){
+  const isThreatIntel = targetTab === "threatIntel";
+  $("tabBlacklist").classList.toggle("active", !isThreatIntel);
+  $("tabThreatIntel").classList.toggle("active", isThreatIntel);
+  $("viewBlacklist").classList.toggle("hidden", isThreatIntel);
+  $("viewThreatIntel").classList.toggle("hidden", !isThreatIntel);
+  if(isThreatIntel){
+    loadFeeds();
+  }
+}
+
+$("tabBlacklist").onclick = () => switchTab("blacklist");
+$("tabThreatIntel").onclick = () => switchTab("threatIntel");
+
+// --- Threat Intelligence Feeds Management ---
+let threatFeeds = [];
+
+async function loadFeeds(){
+  try{
+    const res = await api("/api/feeds");
+    threatFeeds = Array.isArray(res) ? res : (Array.isArray(res.feeds) ? res.feeds : []);
+    renderFeeds();
+  }catch(err){
+    console.warn("Could not load feeds from API, trying fallback:", err);
+    try{
+      const r = await fetch("feeds.json", { cache: "no-store" });
+      if(r.ok){
+        const data = await r.json();
+        threatFeeds = Array.isArray(data) ? data : (Array.isArray(data.feeds) ? data.feeds : []);
+        renderFeeds();
+      }
+    }catch{}
+  }
+}
+
+function renderFeeds(){
+  const tbody = $("feedsRows");
+  const total = threatFeeds.length;
+  const activeCount = threatFeeds.filter(f => f.enabled).length;
+  let totalIpsFromFeeds = 0;
+  for(const f of threatFeeds){
+    if(f.enabled){
+      const c = f.ipCount !== undefined ? f.ipCount : (f.count || 0);
+      totalIpsFromFeeds += c;
+    }
+  }
+  
+  $("feedCountBadge").textContent = total;
+  $("intelActiveFeeds").textContent = `${activeCount} / ${total}`;
+  $("intelTotalIps").textContent = totalIpsFromFeeds > 0 ? totalIpsFromFeeds.toLocaleString() : (allIps.length ? allIps.length.toLocaleString() : "—");
+  
+  if(!threatFeeds.length){
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">No threat intelligence feeds configured. Add one using the form on the right.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = threatFeeds.map(feed => {
+    const rawSync = feed.lastSynced || feed.last_synced;
+    const lastSyncStr = rawSync ? new Date(rawSync).toLocaleString() : "Never";
+    const ipCnt = feed.ipCount !== undefined ? feed.ipCount : (feed.count !== undefined ? feed.count : null);
+    const countDisplay = (ipCnt !== null && ipCnt !== undefined) ? Number(ipCnt).toLocaleString() + " IPs" : "Pending sync";
+    return `
+      <tr data-feed-id="${esc(feed.id)}">
+        <td style="font-weight:700">${esc(feed.name || 'Unnamed Feed')}</td>
+        <td>
+          <a class="url-cell" href="${esc(feed.url)}" target="_blank" rel="noopener noreferrer" title="${esc(feed.url)}">
+            ${esc(feed.url)}
+          </a>
+        </td>
+        <td>
+          <label class="switch" title="${feed.enabled ? 'Enabled - Checked every hour' : 'Disabled - Ignored during sync'}">
+            <input type="checkbox" class="feed-toggle" data-id="${esc(feed.id)}" ${feed.enabled ? "checked" : ""}>
+            <span class="slider"></span>
+          </label>
+        </td>
+        <td style="font-size:12px;color:#54647e">${esc(lastSyncStr)}</td>
+        <td><span class="pill">${esc(countDisplay)}</span></td>
+        <td>
+          <div class="row-actions">
+            <button class="secondary small test-feed-btn" data-id="${esc(feed.id)}" title="Test fetching this feed URL">Test</button>
+            <button class="danger small del-feed-btn" data-id="${esc(feed.id)}" title="Delete this feed">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+async function saveFeeds(showMessage = true){
+  try{
+    const res = await api("/api/feeds", { feeds: threatFeeds });
+    if(res && res.feeds) threatFeeds = res.feeds;
+    renderFeeds();
+    if(showMessage){
+      notice($("intelNotice"), "Threat intelligence feed configuration saved.", "success");
+    }
+  }catch(err){
+    notice($("intelNotice"), "Failed to save feed configuration: " + err.message, "error");
+  }
+}
+
+$("addFeedForm").onsubmit = async e => {
+  e.preventDefault();
+  hideNotice($("intelNotice"));
+  const name = $("feedName").value.trim();
+  const url = $("feedUrl").value.trim();
+  
+  if(!name || !url){
+    notice($("intelNotice"), "Please enter both a feed name and a valid URL.", "error");
+    return;
+  }
+  if(!/^https?:\/\//i.test(url)){
+    notice($("intelNotice"), "Feed URL must start with http:// or https://", "error");
+    return;
+  }
+  
+  const existing = threatFeeds.find(f => f.url && f.url.toLowerCase() === url.toLowerCase());
+  if(existing){
+    notice($("intelNotice"), `A feed with this URL already exists ("${existing.name}").`, "error");
+    return;
+  }
+  
+  $("addFeedBtn").disabled = true;
+  $("addFeedBtn").textContent = "Adding feed...";
+  
+  try{
+    const newFeed = {
+      id: "feed-" + Date.now(),
+      name,
+      url,
+      enabled: true,
+      lastSynced: null,
+      ipCount: 0
+    };
+    threatFeeds.push(newFeed);
+    await saveFeeds(false);
+    $("feedName").value = "";
+    $("feedUrl").value = "";
+    notice($("intelNotice"), `Feed "${name}" added successfully! Click "⚡ Sync Feeds Now" to immediately aggregate its IPs into blacklist.txt.`, "success");
+  }catch(err){
+    notice($("intelNotice"), err.message, "error");
+  }finally{
+    $("addFeedBtn").disabled = false;
+    $("addFeedBtn").textContent = "＋ Add Feed Integration";
+  }
+};
+
+$("feedsRows").onclick = async e => {
+  const toggle = e.target.closest(".feed-toggle");
+  const delBtn = e.target.closest(".del-feed-btn");
+  const testBtn = e.target.closest(".test-feed-btn");
+  
+  if(toggle){
+    const id = toggle.dataset.id;
+    const feed = threatFeeds.find(f => f.id === id);
+    if(feed){
+      feed.enabled = toggle.checked;
+      await saveFeeds(false);
+      notice($("intelNotice"), `Feed "${feed.name}" ${feed.enabled ? "enabled" : "disabled"}.`, "success");
+      renderFeeds();
+    }
+  }
+  
+  if(delBtn){
+    const id = delBtn.dataset.id;
+    const feed = threatFeeds.find(f => f.id === id);
+    if(!feed) return;
+    if(confirm(`Are you sure you want to delete feed "${feed.name}"?\nURL: ${feed.url}\n\nNote: On next sync, IPs that only existed in this feed will be removed from blacklist.txt.`)){
+      threatFeeds = threatFeeds.filter(f => f.id !== id);
+      await saveFeeds(false);
+      notice($("intelNotice"), `Feed "${feed.name}" deleted.`, "success");
+      renderFeeds();
+    }
+  }
+  
+  if(testBtn){
+    const id = testBtn.dataset.id;
+    const feed = threatFeeds.find(f => f.id === id);
+    if(!feed) return;
+    testBtn.disabled = true;
+    testBtn.textContent = "...";
+    try{
+      notice($("intelNotice"), `Testing connection to "${feed.url}"...`, "success");
+      const r = await fetch(feed.url, { cache: "no-store" });
+      if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+      const text = await r.text();
+      const lines = text.split(/\r?\n/).filter(l => l.trim() && !l.trim().startsWith("#"));
+      notice($("intelNotice"), `✓ Successfully connected to "${feed.name}"! Found ${lines.length.toLocaleString()} lines / candidates in feed.`, "success");
+    }catch(err){
+      notice($("intelNotice"), `❌ Could not reach feed URL "${feed.url}": ${err.message}`, "error");
+    }finally{
+      testBtn.disabled = false;
+      testBtn.textContent = "Test";
+    }
+  }
+};
+
+async function syncFeedsNow(){
+  const btn1 = $("syncNowBtn");
+  const btn2 = $("sideSyncNowBtn");
+  btn1.disabled = true;
+  btn2.disabled = true;
+  btn1.innerHTML = `<span class="sync-spin">↻</span> Syncing feeds...`;
+  btn2.innerHTML = `<span class="sync-spin">↻</span> Syncing...`;
+  hideNotice($("intelNotice"));
+  notice($("intelNotice"), "Synchronizing threat intel feeds into blacklist.txt and purging non-intel IPs... Please wait...", "success");
+
+  try{
+    const res = await api("/api/feeds/sync", {});
+    notice($("intelNotice"), `✓ ${res.message || "Sync completed successfully!"}`, "success");
+    await loadFeeds();
+    await loadList();
+  }catch(err){
+    notice($("intelNotice"), "Sync failed: " + err.message, "error");
+  }finally{
+    btn1.disabled = false;
+    btn2.disabled = false;
+    btn1.textContent = "⚡ Sync Feeds Now";
+    btn2.textContent = "⚡ Run Sync Now";
+  }
+}
+
+$("syncNowBtn").onclick = syncFeedsNow;
+$("sideSyncNowBtn").onclick = syncFeedsNow;
 
 initDates();
 </script></body></html>
