@@ -1188,5 +1188,10 @@
     "date": "2026-10-22",
     "remark": "Original blacklist entry",
     "source": "manual"
+  },
+  "1.88.164.165": {
+    "date": "2026-10-23",
+    "remark": "test",
+    "source": "manual"
   }
 }
