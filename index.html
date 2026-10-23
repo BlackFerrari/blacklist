@@ -16,8 +16,8 @@
 
 <div id="viewBlacklist">
 <div class="stats"><div class="panel stat"><div class="stat-label">Total IP addresses</div><div class="stat-value" id="totalCount">—</div><div class="stat-note">Current repository list</div></div><div class="panel stat"><div class="stat-label">Matching results</div><div class="stat-value" id="shownCount">—</div><div class="stat-note">Search-filtered count</div></div><div class="panel stat"><div class="stat-label">List status</div><div class="stat-value" style="font-size:20px;margin-top:14px"><span class="pill">Connected</span></div><div class="stat-note" id="lastUpdated">Not refreshed yet</div></div></div>
-<div class="layout"><section class="panel list-panel"><div class="list-head"><div><h2>Blacklist entries</h2><div class="muted" style="font-size:12px;margin-top:4px">One IP address per line in blacklist.txt</div></div><div class="header-actions"><button id="exportExcelBtn" class="secondary small" type="button" title="Download all blacklisted IPs as an Excel (.xlsx) file">📥 Download Excel</button><button id="importExcelBtn" class="primary small" type="button" title="Upload Excel to add new IPs (skips duplicates)">＋ Import Excel</button><button id="whitelistBtn" class="danger small" type="button" style="border:1px solid #fed7d7" title="Upload Whitelist Excel to remove IPs from blacklist">🛡️ Upload Whitelist</button><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search IP or date…" autocomplete="off"></div></div></div><div style="overflow:auto"><table><thead><tr><th>IP address</th><th>Insert date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ipRows"></tbody></table><div id="emptyState" class="empty hidden">No IP addresses match your search.</div></div><div class="pagination"><span id="pageInfo">0 entries</span><div style="display:flex;gap:7px"><button id="prevBtn" class="ghost small">Previous</button><button id="nextBtn" class="ghost small">Next</button></div></div></section>
-<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Duplicate entries are rejected.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><div class="field"><label for="newDate">Insert date</label><input id="newDate" type="date"></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="excel-card"><h3>Excel Management</h3><p>Export current blacklist or upload a spreadsheet to add new IPs.</p><div class="btn-stack"><button id="sideExportBtn" class="secondary full small" type="button">📥 Download Excel (.xlsx)</button><button id="sideImportBtn" class="primary full small" type="button">📤 Bulk Import Excel</button></div><p style="font-size:11px;color:#8595ae;margin-top:8px">Duplicate IPs in file are automatically ignored.</p></div><div class="whitelist-card"><h3>Whitelist Removal</h3><p>Upload an Excel file of allowed IPs to remove them from the block list.</p><button id="sideWhitelistBtn" class="danger full small" type="button" style="border:1px solid #fecaca">🛡️ Upload Whitelist Excel</button><p style="font-size:11px;color:#a87163;margin-top:8px">Only existing blocked IPs are removed.</p></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div>
+<div class="layout"><section class="panel list-panel"><div class="list-head"><div><h2>Blacklist entries</h2><div class="muted" style="font-size:12px;margin-top:4px">One IP address per line in blacklist.txt</div></div><div class="header-actions"><button id="exportExcelBtn" class="secondary small" type="button" title="Download all blacklisted IPs as an Excel (.xlsx) file">📥 Download Excel</button><button id="importExcelBtn" class="primary small" type="button" title="Upload Excel to add new IPs (skips duplicates)">＋ Import Excel</button><button id="whitelistBtn" class="danger small" type="button" style="border:1px solid #fed7d7" title="Upload Whitelist Excel to remove IPs from blacklist">🛡️ Upload Whitelist</button><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search IP, date, remark…" autocomplete="off"></div></div></div><div style="overflow:auto"><table><thead><tr><th>IP address</th><th>Insert date</th><th>Source</th><th>Remark</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ipRows"></tbody></table><div id="emptyState" class="empty hidden">No IP addresses match your search.</div></div><div class="pagination"><span id="pageInfo">0 entries</span><div style="display:flex;gap:7px"><button id="prevBtn" class="ghost small">Previous</button><button id="nextBtn" class="ghost small">Next</button></div></div></section>
+<aside class="panel side"><h2>Add an IP address</h2><p class="muted">Valid IPv4 or IPv6 only. Protected from threat intel purge.</p><form id="addForm"><div class="field"><label for="newIp">IP address</label><input id="newIp" placeholder="203.0.113.10" autocomplete="off" required></div><div class="field"><label for="newDate">Insert date</label><input id="newDate" type="date"></div><div class="field"><label for="newRemark">Remark / Reason</label><input id="newRemark" placeholder="e.g. Scans port 8080 or SOC alert" autocomplete="off"></div><button id="addBtn" class="primary full">＋ Add to blacklist</button></form><div id="actionNotice" class="notice hidden"></div><div class="excel-card"><h3>Excel Management</h3><p>Export current blacklist or upload a spreadsheet to add new IPs.</p><div class="btn-stack"><button id="sideExportBtn" class="secondary full small" type="button">📥 Download Excel (.xlsx)</button><button id="sideImportBtn" class="primary full small" type="button">📤 Bulk Import Excel</button></div><p style="font-size:11px;color:#8595ae;margin-top:8px">Duplicate IPs in file are automatically ignored.</p></div><div class="whitelist-card"><h3>Whitelist Removal</h3><p>Upload an Excel file of allowed IPs to remove them from the block list.</p><button id="sideWhitelistBtn" class="danger full small" type="button" style="border:1px solid #fecaca">🛡️ Upload Whitelist Excel</button><p style="font-size:11px;color:#a87163;margin-top:8px">Only existing blocked IPs are removed.</p></div><div class="urlbox"><label>Public raw text URL</label><div id="rawUrl" class="url">Configure RAW_URL in index.html.</div><button id="copyUrlBtn" class="secondary small" type="button">Copy raw URL</button></div><p class="muted" style="font-size:12px;margin-top:15px">Changes are committed to GitHub. The raw URL may take a short time to reflect updates because of caching.</p></aside></div>
 </div>
 
 <div id="viewThreatIntel" class="hidden">
@@ -69,8 +69,8 @@
 </main></div>
 <input type="file" id="importExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
 <input type="file" id="whitelistExcelInput" accept=".xlsx,.xls,.csv" style="display:none">
-<div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="field"><label for="editDate">Insert date</label><input id="editDate" type="date"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
-<div id="bulkModalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" style="max-width:490px"><h2 id="bulkModalTitle">Confirm Action</h2><p id="bulkModalSubtitle" class="muted">Review the detected IP addresses before proceeding.</p><div id="bulkSummary" class="preview-summary"></div><div id="bulkPreview" class="preview-box"></div><div id="bulkProgressArea" class="hidden"><div id="bulkProgressText" class="muted" style="font-size:12px">Processing...</div><div class="progress-bar-bg"><div id="bulkProgressFill" class="progress-bar-fill"></div></div></div><div class="modal-actions"><button id="cancelBulkBtn" type="button" class="ghost">Cancel</button><button id="confirmBulkBtn" type="button" class="primary">Confirm & Proceed</button></div></div></div>
+<div id="modalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Edit IP address</h2><p id="modalDescription" class="muted">Update this entry.</p><form id="editForm"><div class="field"><label for="editIp">IP address</label><input id="editIp" required autocomplete="off"></div><div class="field"><label for="editDate">Insert date</label><input id="editDate" type="date"></div><div class="field"><label for="editRemark">Remark / Reason</label><input id="editRemark" placeholder="e.g. Malicious scanner or SOC report" autocomplete="off"></div><div class="modal-actions"><button id="cancelEdit" type="button" class="ghost">Cancel</button><button class="primary">Save changes</button></div></form></div></div>
+<div id="bulkModalBackdrop" class="modal-backdrop hidden"><div class="panel modal" role="dialog" aria-modal="true" style="max-width:520px"><h2 id="bulkModalTitle">Confirm Action</h2><p id="bulkModalSubtitle" class="muted">Review the detected IP addresses before proceeding.</p><div id="bulkSummary" class="preview-summary"></div><div id="bulkRemarkField" class="field hidden" style="margin:8px 0 12px"><label for="bulkDefaultRemark">Default Remark for imported IPs</label><input id="bulkDefaultRemark" placeholder="e.g. Bulk import - Incident #402" autocomplete="off"></div><div id="bulkPreview" class="preview-box"></div><div id="bulkProgressArea" class="hidden"><div id="bulkProgressText" class="muted" style="font-size:12px">Processing...</div><div class="progress-bar-bg"><div id="bulkProgressFill" class="progress-bar-fill"></div></div></div><div class="modal-actions"><button id="cancelBulkBtn" type="button" class="ghost">Cancel</button><button id="confirmBulkBtn" type="button" class="primary">Confirm & Proceed</button></div></div></div>
 <script>
 // When running locally, use the local proxy server; in production, use the deployed worker.
 const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
@@ -81,6 +81,16 @@ const PAGE_SIZE=12;let sessionToken="",allIps=[],page=1,editOriginal="";const $=
 const DATES_STORAGE_KEY="blacklist_ip_dates";
 let ipDates={};
 try{ipDates=JSON.parse(localStorage.getItem(DATES_STORAGE_KEY)||"{}")}catch{ipDates={}}
+let userIps={};
+async function initUserIps(){
+  try{
+    const r=await fetch("user-ips.json",{cache:"no-store"});
+    if(r.ok){userIps=await r.json()}
+  }catch{}
+}
+function getUserMeta(ip){
+  return userIps[ip]||userIps[ip.toLowerCase()]||null;
+}
 const todayDateStr=()=>new Date().toISOString().slice(0,10);
 const saveDates=()=>{try{localStorage.setItem(DATES_STORAGE_KEY,JSON.stringify(ipDates))}catch{}};
 const getInsertDate=ip=>ipDates[ip]||ipDates[ip.toLowerCase()]||"2026-10-22";
@@ -111,7 +121,17 @@ function render(){
     filtered=allIps.filter(ip=>{
       if(ip.toLowerCase().includes(q))return true;
       const d=ipDates[ip]||ipDates[ip.toLowerCase()];
-      return d&&d.includes(q);
+      if(d&&d.includes(q))return true;
+      const m=getUserMeta(ip);
+      if(m){
+        if(m.remark&&m.remark.toLowerCase().includes(q))return true;
+        if(m.source&&m.source.toLowerCase().includes(q))return true;
+        if(m.date&&m.date.includes(q))return true;
+        if("user inserted".includes(q)||"manual".includes(q)||"bulk".includes(q))return true;
+      }else{
+        if("threat intel".includes(q)||"intel".includes(q)||"ipsum".includes(q)||"feed".includes(q))return true;
+      }
+      return false;
     });
   }
   const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
@@ -124,8 +144,22 @@ function render(){
   $("nextBtn").disabled=page>=pages;
   $("emptyState").classList.toggle("hidden",rows.length>0);
   $("ipRows").innerHTML=rows.map(ip=>{
-    const d=getInsertDate(ip);
-    return `<tr><td class="ip">${esc(ip)}</td><td class="date">${esc(d)}</td><td><span class="pill">Blacklisted</span></td><td><div class="row-actions"><button class="secondary small" data-edit="${esc(ip)}">Edit</button><button class="danger small" data-delete="${esc(ip)}">Delete</button></div></td></tr>`;
+    const meta=getUserMeta(ip);
+    const d=(meta&&meta.date)||getInsertDate(ip);
+    const sourceBadge=meta
+      ? `<span class="badge-chip badge-yellow" title="User-inserted: Protected from threat intel auto-purge">🛡️ ${esc(meta.source==='bulk'?'Bulk':'Manual')}</span>`
+      : `<span class="badge-chip badge-green" title="Threat Intelligence Feed IP">🌐 Intel Feed</span>`;
+    const remarkDisplay=meta
+      ? esc(meta.remark||'—')
+      : `<span class="muted" style="font-size:11px">Feed: IPsum</span>`;
+    return `<tr>
+      <td class="ip">${esc(ip)}</td>
+      <td class="date">${esc(d)}</td>
+      <td>${sourceBadge}</td>
+      <td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${meta?esc(meta.remark||''):'Automated Threat Intelligence Feed'}">${remarkDisplay}</td>
+      <td><span class="pill">Blacklisted</span></td>
+      <td><div class="row-actions"><button class="secondary small" data-edit="${esc(ip)}">Edit</button><button class="danger small" data-delete="${esc(ip)}">Delete</button></div></td>
+    </tr>`;
   }).join("");
   $("lastUpdated").textContent="Refreshed "+new Date().toLocaleTimeString();
 }
@@ -135,8 +169,10 @@ async function loadList(){
   $("refreshBtn").disabled=true;
   try{
     initDates();
+    initUserIps();
     const d=await api("/api/list");
     allIps=d.ips;
+    if(d.user_ips&&Object.keys(d.user_ips).length){userIps=d.user_ips}
     render();
   }catch(e){
     if(/session|unauthorized|expired/i.test(e.message)){
@@ -158,14 +194,18 @@ $("addForm").onsubmit=async e=>{
   hideNotice($("actionNotice"));
   const ip=$("newIp").value.trim();
   const dateVal=$("newDate").value||todayDateStr();
+  const remarkVal=($("newRemark")&&$("newRemark").value.trim())||"Manual entry";
   if(!validIp(ip)){notice($("actionNotice"),"Enter a valid IPv4 or IPv6 address.");return}
   $("addBtn").disabled=true;
   try{
-    const d=await api("/api/change",{action:"add",ip});
+    const d=await api("/api/change",{action:"add",ip,date:dateVal,remark:remarkVal});
     setInsertDate(ip,dateVal);
+    userIps[ip]={date:dateVal,remark:remarkVal,source:"manual"};
+    if(d.user_ips){userIps=d.user_ips}
     allIps=d.ips;
     $("newIp").value="";
     $("newDate").value=todayDateStr();
+    if($("newRemark"))$("newRemark").value="";
     page=1;
     render();
     notice($("actionNotice"),d.message,"success");
@@ -180,8 +220,10 @@ $("ipRows").onclick=e=>{
   if(edit){
     editOriginal=edit.dataset.edit;
     $("editIp").value=editOriginal;
-    if($("editDate"))$("editDate").value=getInsertDate(editOriginal);
-    $("modalDescription").textContent="Replace "+editOriginal+" with a new address.";
+    const meta=getUserMeta(editOriginal);
+    if($("editDate"))$("editDate").value=(meta&&meta.date)||getInsertDate(editOriginal);
+    if($("editRemark"))$("editRemark").value=(meta&&meta.remark)||"";
+    $("modalDescription").textContent="Update entry details for "+editOriginal+".";
     $("modalBackdrop").classList.remove("hidden");
     $("editIp").focus();
   }
@@ -190,6 +232,8 @@ $("ipRows").onclick=e=>{
     if(confirm("Delete "+ip+" from the blacklist? This will be committed to GitHub.")){
       change({action:"delete",ip}).then(()=>{
         removeInsertDate(ip);
+        delete userIps[ip];
+        delete userIps[ip.toLowerCase()];
         render();
       });
     }
@@ -201,10 +245,14 @@ $("editForm").onsubmit=async e=>{
   e.preventDefault();
   const ip=$("editIp").value.trim();
   const dateVal=($("editDate")&&$("editDate").value)||todayDateStr();
+  const remarkVal=($("editRemark")&&$("editRemark").value.trim())||"Manual entry";
   if(!validIp(ip)){alert("Enter a valid IPv4 or IPv6 address.");return}
-  await change({action:"edit",oldIp:editOriginal,ip});
+  await change({action:"edit",oldIp:editOriginal,ip,date:dateVal,remark:remarkVal});
   removeInsertDate(editOriginal);
+  delete userIps[editOriginal];
+  delete userIps[editOriginal.toLowerCase()];
   setInsertDate(ip,dateVal);
+  userIps[ip]={date:dateVal,remark:remarkVal,source:"manual"};
   render();
 };
 async function change(payload){
@@ -212,6 +260,7 @@ async function change(payload){
   try{
     const d=await api("/api/change",payload);
     allIps=d.ips;
+    if(d.user_ips){userIps=d.user_ips}
     $("modalBackdrop").classList.add("hidden");
     render();
     notice($("actionNotice"),d.message,"success");
@@ -228,13 +277,18 @@ function downloadExcel(){
     alert("The blacklist is currently empty.");
     return;
   }
-  const data = allIps.map(ip => ({
-    "IP Address": ip,
-    "Insert Date": getInsertDate(ip),
-    "Status": "Blacklisted"
-  }));
+  const data = allIps.map(ip => {
+    const meta = getUserMeta(ip);
+    return {
+      "IP Address": ip,
+      "Insert Date": (meta && meta.date) || getInsertDate(ip),
+      "Source": meta ? (meta.source === "bulk" ? "User Inserted (Bulk)" : "User Inserted (Manual)") : "Threat Intel Feed",
+      "Remark": meta ? (meta.remark || "") : "Feed: IPsum Threat Feed",
+      "Status": "Blacklisted"
+    };
+  });
   const ws = XLSX.utils.json_to_sheet(data);
-  ws["!cols"] = [{ wch: 22 }, { wch: 15 }, { wch: 15 }];
+  ws["!cols"] = [{ wch: 20 }, { wch: 14 }, { wch: 22 }, { wch: 32 }, { wch: 14 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Blacklist");
   XLSX.writeFile(wb, `blacklist-ips-${todayDateStr()}.xlsx`);
@@ -245,16 +299,18 @@ async function parseExcelFile(file){
   const wb = XLSX.read(buf, { type: "array" });
   const rawIps = [];
   const dates = {};
+  const remarks = {};
   wb.SheetNames.forEach(sheetName => {
     const sheet = wb.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
     if(!rows || !rows.length) return;
-    let ipCol = -1, dateCol = -1;
+    let ipCol = -1, dateCol = -1, remarkCol = -1;
     if(Array.isArray(rows[0])){
       rows[0].forEach((cell, idx) => {
         const str = String(cell).toLowerCase().trim();
         if(["ip", "ip address", "ip_address", "ipaddress", "address"].includes(str)) ipCol = idx;
         if(["insert date", "date", "insert_date", "added", "timestamp"].includes(str)) dateCol = idx;
+        if(["remark", "remarks", "note", "notes", "description", "comment", "comments", "reason"].includes(str)) remarkCol = idx;
       });
     }
     const startRow = ipCol >= 0 ? 1 : 0;
@@ -266,6 +322,7 @@ async function parseExcelFile(file){
         if(validIp(v)){
           rawIps.push(v);
           if(dateCol >= 0 && row[dateCol]) dates[v] = String(row[dateCol]).trim();
+          if(remarkCol >= 0 && row[remarkCol]) remarks[v] = String(row[remarkCol]).trim();
         }
       } else {
         for(let c = 0; c < row.length; c++){
@@ -287,12 +344,12 @@ async function parseExcelFile(file){
       uniqueIps.push(ip);
     }
   }
-  return { uniqueIps, dates };
+  return { uniqueIps, dates, remarks };
 }
 
 async function handleImportFile(file){
   try{
-    const { uniqueIps, dates } = await parseExcelFile(file);
+    const { uniqueIps, dates, remarks } = await parseExcelFile(file);
     if(!uniqueIps.length){
       alert("No valid IPv4 or IPv6 addresses found in the uploaded file.");
       return;
@@ -308,14 +365,19 @@ async function handleImportFile(file){
       alert(`All ${uniqueIps.length} valid IP(s) in "${file.name}" are already in the blacklist. 0 new IPs added.`);
       return;
     }
-    bulkPendingAction = { type: "import", ips: newIps, dates };
+    bulkPendingAction = { type: "import", ips: newIps, dates, remarks };
     $("bulkModalTitle").textContent = "Bulk Import IP Addresses";
-    $("bulkModalSubtitle").textContent = `File: ${file.name} — Review before adding to GitHub blacklist.`;
+    $("bulkModalSubtitle").textContent = `File: ${file.name} — Protected user-inserted IPs (not removed during threat intel sync).`;
     $("bulkSummary").innerHTML = `
       <span class="badge-chip badge-green">✓ ${newIps.length} New IP(s) to add</span>
       <span class="badge-chip badge-yellow">⚠ ${duplicates.length} Duplicate(s) ignored</span>
     `;
-    $("bulkPreview").innerHTML = newIps.map(ip => `<div class="preview-item"><span>${esc(ip)}</span><span class="date">${esc(dates[ip] || todayDateStr())}</span></div>`).join("");
+    $("bulkRemarkField").classList.remove("hidden");
+    $("bulkDefaultRemark").value = `Bulk import: ${file.name.replace(/\.[^/.]+$/, "")}`;
+    $("bulkPreview").innerHTML = newIps.map(ip => {
+      const r = remarks[ip] ? `<span class="muted" style="margin-left:6px">(${esc(remarks[ip])})</span>` : '';
+      return `<div class="preview-item"><span><b>${esc(ip)}</b>${r}</span><span class="date">${esc(dates[ip] || todayDateStr())}</span></div>`;
+    }).join("");
     $("confirmBulkBtn").textContent = `Add ${newIps.length} New IP(s)`;
     $("confirmBulkBtn").className = "primary";
     $("confirmBulkBtn").disabled = false;
@@ -353,6 +415,7 @@ async function handleWhitelistFile(file){
       <span class="badge-chip badge-red">🛡️ ${toRemove.length} Matching IP(s) to remove</span>
       <span class="badge-chip badge-gray">${notInList} not in blocklist (ignored)</span>
     `;
+    $("bulkRemarkField").classList.add("hidden");
     $("bulkPreview").innerHTML = toRemove.map(ip => `<div class="preview-item"><span class="ip">${esc(ip)}</span><span class="pill" style="background:#fee2e2;color:#b91c1c">Will Unblock</span></div>`).join("");
     $("confirmBulkBtn").textContent = `Remove ${toRemove.length} IP(s) from Blacklist`;
     $("confirmBulkBtn").className = "danger";
@@ -367,7 +430,7 @@ async function handleWhitelistFile(file){
 
 async function executeBulkAction(){
   if(!bulkPendingAction) return;
-  const { type, ips, dates } = bulkPendingAction;
+  const { type, ips, dates, remarks } = bulkPendingAction;
   $("confirmBulkBtn").disabled = true;
   $("cancelBulkBtn").disabled = true;
   $("bulkProgressArea").classList.remove("hidden");
@@ -377,44 +440,49 @@ async function executeBulkAction(){
 
   try{
     if(type === "import"){
-      if(ips.length === 1){
-        progressText.textContent = `Adding ${ips[0]}...`;
-        progressFill.style.width = "60%";
-        const res = await api("/api/change", { action: "add", ip: ips[0] });
-        allIps = res.ips;
-      } else {
-        progressText.textContent = `Adding ${ips.length} new IP(s)...`;
-        try{
-          const r = await api("/api/change", { action: "bulk_add", ips });
-          allIps = r.ips;
-        }catch(err){
-          if(/Invalid request|Method not allowed|400/i.test(err.message)){
-            for(let i=0; i<ips.length; i++){
-              progressText.textContent = `Adding IP ${i+1} of ${ips.length}: ${ips[i]}...`;
-              progressFill.style.width = `${Math.round(((i+1)/ips.length)*100)}%`;
-              const res = await api("/api/change", { action: "add", ip: ips[i] });
-              allIps = res.ips;
-            }
-          } else {
-            throw err;
+      const defRemark = $("bulkDefaultRemark") ? $("bulkDefaultRemark").value.trim() : "Bulk import";
+      const items = ips.map(ip => ({
+        ip,
+        date: (dates && dates[ip]) || todayDateStr(),
+        remark: (remarks && remarks[ip]) || defRemark || "Bulk import"
+      }));
+
+      progressText.textContent = `Adding ${ips.length} new user-inserted IP(s)...`;
+      try{
+        const r = await api("/api/change", { action: "bulk_add", ips, items, remark: defRemark });
+        allIps = r.ips;
+        if(r.user_ips) userIps = r.user_ips;
+      }catch(err){
+        if(/Invalid request|Method not allowed|400/i.test(err.message)){
+          for(let i=0; i<items.length; i++){
+            progressText.textContent = `Adding IP ${i+1} of ${items.length}: ${items[i].ip}...`;
+            progressFill.style.width = `${Math.round(((i+1)/items.length)*100)}%`;
+            const res = await api("/api/change", { action: "add", ip: items[i].ip, date: items[i].date, remark: items[i].remark });
+            allIps = res.ips;
+            if(res.user_ips) userIps = res.user_ips;
           }
+        } else {
+          throw err;
         }
       }
-      for(const ip of ips){
-        setInsertDate(ip, (dates && dates[ip]) || todayDateStr());
+      for(const itm of items){
+        setInsertDate(itm.ip, itm.date);
+        userIps[itm.ip] = { date: itm.date, remark: itm.remark, source: "bulk" };
       }
-      notice($("actionNotice"), `Successfully added ${ips.length} new IP(s). Duplicates were ignored.`, "success");
+      notice($("actionNotice"), `Successfully added ${ips.length} user-inserted IP(s). Protected from threat intel auto-purge.`, "success");
     } else if(type === "whitelist"){
       if(ips.length === 1){
         progressText.textContent = `Removing ${ips[0]} from blacklist...`;
         progressFill.style.width = "60%";
         const res = await api("/api/change", { action: "delete", ip: ips[0] });
         allIps = res.ips;
+        if(res.user_ips) userIps = res.user_ips;
       } else {
         progressText.textContent = `Removing ${ips.length} whitelisted IP(s)...`;
         try{
           const r = await api("/api/change", { action: "bulk_delete", ips });
           allIps = r.ips;
+          if(r.user_ips) userIps = r.user_ips;
         }catch(err){
           if(/Invalid request|Method not allowed|400/i.test(err.message)){
             for(let i=0; i<ips.length; i++){
@@ -422,6 +490,7 @@ async function executeBulkAction(){
               progressFill.style.width = `${Math.round(((i+1)/ips.length)*100)}%`;
               const res = await api("/api/change", { action: "delete", ip: ips[i] });
               allIps = res.ips;
+              if(res.user_ips) userIps = res.user_ips;
             }
           } else {
             throw err;
@@ -430,6 +499,8 @@ async function executeBulkAction(){
       }
       for(const ip of ips){
         removeInsertDate(ip);
+        delete userIps[ip];
+        delete userIps[ip.toLowerCase()];
       }
       notice($("actionNotice"), `Successfully removed ${ips.length} whitelisted IP(s) from the block list.`, "success");
     }
@@ -447,6 +518,7 @@ async function executeBulkAction(){
     bulkPendingAction = null;
     $("importExcelInput").value = "";
     $("whitelistExcelInput").value = "";
+    if($("bulkDefaultRemark")) $("bulkDefaultRemark").value = "";
   }
 }
 

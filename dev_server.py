@@ -44,6 +44,9 @@ class DevHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/feeds":
             self._handle_get_feeds()
             return
+        if self.path == "/api/user-ips":
+            self._handle_get_user_ips()
+            return
         if self.path == "/api/list":
             self._handle_get_list()
             return
@@ -56,6 +59,9 @@ class DevHandler(SimpleHTTPRequestHandler):
         if self.path == "/api/feeds":
             self._handle_save_feeds()
             return
+        if self.path == "/api/user-ips":
+            self._handle_save_user_ips()
+            return
         if self.path == "/api/feeds/sync":
             self._handle_sync_feeds()
             return
@@ -66,14 +72,52 @@ class DevHandler(SimpleHTTPRequestHandler):
 
     def _handle_get_list(self):
         blacklist_file = DIRECTORY / "blacklist.txt"
+        user_ips_file = DIRECTORY / "user-ips.json"
         ips = []
         if blacklist_file.exists():
             for line in blacklist_file.read_text(encoding="utf-8").splitlines():
                 s = line.strip()
                 if s and not s.startswith("#"):
                     ips.append(s)
-        resp = json.dumps({"ips": ips}).encode("utf-8")
+        user_ips = {}
+        if user_ips_file.exists():
+            try:
+                user_ips = json.loads(user_ips_file.read_text(encoding="utf-8"))
+            except Exception:
+                user_ips = {}
+        resp = json.dumps({"ips": ips, "user_ips": user_ips}).encode("utf-8")
         self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(resp)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(resp)
+
+    def _handle_get_user_ips(self):
+        user_ips_file = DIRECTORY / "user-ips.json"
+        data = b"{}"
+        if user_ips_file.exists():
+            data = user_ips_file.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(data)
+
+    def _handle_save_user_ips(self):
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length) if content_length > 0 else b"{}"
+        user_ips_file = DIRECTORY / "user-ips.json"
+        try:
+            parsed = json.loads(body.decode("utf-8"))
+            user_ips_file.write_text(json.dumps(parsed, indent=2), encoding="utf-8")
+            resp = json.dumps({"success": True, "user_ips": parsed}).encode("utf-8")
+            status = 200
+        except Exception as e:
+            resp = json.dumps({"error": str(e)}).encode("utf-8")
+            status = 400
+        self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(resp)))
         self._send_cors_headers()
@@ -182,22 +226,58 @@ class DevHandler(SimpleHTTPRequestHandler):
                 if dates_file.exists():
                     dates = json.loads(dates_file.read_text(encoding="utf-8"))
                 today = datetime.datetime.now().strftime("%Y-%m-%d")
+                user_ips_file = DIRECTORY / "user-ips.json"
+                user_ips = {}
+                if user_ips_file.exists():
+                    try:
+                        user_ips = json.loads(user_ips_file.read_text(encoding="utf-8"))
+                    except Exception:
+                        user_ips = {}
+
+                date_val = payload.get("date") or today
+                remark_val = payload.get("remark") or "Manual entry"
+
                 if action == "add" and ip:
-                    dates[ip] = today
+                    dates[ip] = date_val
+                    user_ips[ip] = {"date": date_val, "remark": remark_val, "source": "manual"}
                 elif action == "delete" and ip:
                     dates.pop(ip, None)
+                    user_ips.pop(ip, None)
                 elif action == "edit" and ip:
                     old_ip = payload.get("oldIp")
-                    old_date = dates.pop(old_ip, today) if old_ip else today
-                    dates[ip] = old_date
+                    old_meta = user_ips.pop(old_ip, None) if old_ip else None
+                    if old_ip:
+                        dates.pop(old_ip, None)
+                    dates[ip] = date_val
+                    user_ips[ip] = {"date": date_val, "remark": remark_val or (old_meta.get("remark") if old_meta else "Manual entry"), "source": "manual"}
                 elif action == "bulk_add":
-                    for item in (payload.get("ips") or []):
-                        if item and item not in dates:
-                            dates[item] = today
+                    bulk_items = payload.get("items")
+                    def_remark = payload.get("remark") or "Bulk import"
+                    if isinstance(bulk_items, list) and bulk_items:
+                        for itm in bulk_items:
+                            if isinstance(itm, dict):
+                                b_ip = itm.get("ip")
+                                b_date = itm.get("date") or today
+                                b_rem = itm.get("remark") or def_remark
+                            else:
+                                b_ip = str(itm).strip()
+                                b_date = today
+                                b_rem = def_remark
+                            if b_ip:
+                                dates[b_ip] = b_date
+                                user_ips[b_ip] = {"date": b_date, "remark": b_rem, "source": "bulk"}
+                    else:
+                        for itm in (payload.get("ips") or []):
+                            if itm:
+                                dates[itm] = today
+                                user_ips[itm] = {"date": today, "remark": def_remark, "source": "bulk"}
                 elif action == "bulk_delete":
                     for item in (payload.get("ips") or []):
                         dates.pop(item, None)
+                        user_ips.pop(item, None)
+
                 dates_file.write_text(json.dumps(dates, indent=2), encoding="utf-8")
+                user_ips_file.write_text(json.dumps(user_ips, indent=2), encoding="utf-8")
 
                 bl_file = DIRECTORY / "blacklist.txt"
                 if bl_file.exists():
@@ -212,7 +292,12 @@ class DevHandler(SimpleHTTPRequestHandler):
                             idx = current_ips.index(old_ip)
                             current_ips[idx] = ip
                     elif action == "bulk_add":
-                        for itm in (payload.get("ips") or []):
+                        to_add_items = []
+                        if isinstance(payload.get("items"), list):
+                            to_add_items = [itm.get("ip") if isinstance(itm, dict) else str(itm).strip() for itm in payload.get("items")]
+                        elif isinstance(payload.get("ips"), list):
+                            to_add_items = payload.get("ips")
+                        for itm in to_add_items:
                             if itm and itm not in current_ips:
                                 current_ips.append(itm)
                     elif action == "bulk_delete":
@@ -222,6 +307,7 @@ class DevHandler(SimpleHTTPRequestHandler):
                     try:
                         resp_dict = json.loads(response_body.decode("utf-8"))
                         resp_dict["ips"] = current_ips
+                        resp_dict["user_ips"] = user_ips
                         response_body = json.dumps(resp_dict).encode("utf-8")
                     except Exception:
                         pass

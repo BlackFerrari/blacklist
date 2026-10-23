@@ -18,6 +18,7 @@ import urllib.request
 DIRECTORY = Path(__file__).resolve().parent
 FEEDS_FILE = DIRECTORY / "feeds.json"
 BLACKLIST_FILE = DIRECTORY / "blacklist.txt"
+USER_IPS_FILE = DIRECTORY / "user-ips.json"
 DATES_FILE = DIRECTORY / "blacklist-dates.json"
 
 IPV4_PATTERN = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
@@ -98,14 +99,27 @@ def sync_all_feeds() -> dict:
             if line.strip() and not line.strip().startswith("#")
         }
 
-    # If any active feeds successfully responded, update blacklist.txt
-    if all_intel_ips:
-        to_add = all_intel_ips - existing_ips
-        to_remove = existing_ips - all_intel_ips
+    # Load user-inserted IPs (manual entries and bulk uploads)
+    user_ips = {}
+    if USER_IPS_FILE.exists():
+        try:
+            user_ips = json.loads(USER_IPS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            user_ips = {}
+
+    user_ip_set = {ip.strip() for ip in user_ips.keys() if is_valid_ip(ip.strip())}
+
+    # Combined target list: Threat Intel IPs + User-Inserted IPs
+    target_ips = all_intel_ips.union(user_ip_set)
+
+    # If any active feeds responded or user IPs exist, update blacklist.txt
+    if target_ips:
+        to_add = target_ips - existing_ips
+        to_remove = existing_ips - target_ips
 
         # Sort IPs naturally
         sorted_ips = sorted(
-            all_intel_ips,
+            target_ips,
             key=lambda ip: ipaddress.ip_address(ip) if is_valid_ip(ip) else 0,
         )
 
@@ -123,6 +137,11 @@ def sync_all_feeds() -> dict:
         for ip in to_remove:
             dates.pop(ip, None)
 
+        # Preserve / set user IPs dates
+        for ip, meta in user_ips.items():
+            if isinstance(meta, dict) and meta.get("date"):
+                dates[ip] = meta["date"]
+
         # Add new IPs with today's date
         for ip in to_add:
             if ip not in dates:
@@ -135,7 +154,9 @@ def sync_all_feeds() -> dict:
 
         return {
             "success": True,
-            "totalIps": len(all_intel_ips),
+            "totalIps": len(target_ips),
+            "threatIntelIps": len(all_intel_ips),
+            "userInsertedIps": len(user_ip_set),
             "added": len(to_add),
             "removed": len(to_remove),
             "feeds": feeds,
