@@ -4,8 +4,8 @@
     "name": "IPsum Threat Intelligence Feed",
     "url": "https://raw.githubusercontent.com/stamparm/ipsum/master/ipsum.txt",
     "enabled": true,
-    "lastSynced": "2026-11-18T22:40:32.360438",
-    "ipCount": 138872,
+    "lastSynced": "2026-11-19T03:50:11.806115",
+    "ipCount": 140106,
     "lastStatus": "ok"
   }
 ]
